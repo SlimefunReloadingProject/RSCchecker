@@ -1,0 +1,51 @@
+# 请勿删除这些配置，否则会影响脚本运行！
+# 请勿删除这些配置，否则会影响脚本运行！
+# 请勿删除这些配置，否则会影响脚本运行！
+# 跳过哪些检查
+ignores:
+  # 填 true 或 false
+  ignoreGroups: false
+  ignoreRecipeType: false
+  ignoreGeoResources: false
+  ignoreMobDrops: false
+  ignoreItems: false
+  ignoreCapacitors: false
+  ignoreMenus: false
+  ignoreMachines: false
+  ignoreGenerators: false
+  ignoreSolarGenerators: false
+  ignoreMaterialGenerators: false
+  ignoreRecipeMachines: false
+  ignoreSimpleMachines: false
+  ignoreMultiblockMachines: false
+  ignoreResearches: false
+
+  # 检查完多方块结构后 再检查可能没有问题的物品
+  ignorePerhapedRecipeType: false
+# 扫描哪些文件
+scan-files:
+  # 你应该在这里填路径
+  # ex: Groups: ['groups.yml','D:/groups.yml', 'C:/groups.yml', 'groups2.yml'] 
+  # 诸如此类 ↑
+  Groups: ['groups.yml']
+  RecipeType: ['recipe_types.yml']
+  GeoResources: ['geo_resources.yml']
+  MobDrops: ['mob_drops.yml']
+  Items: ['items.yml']
+  Capacitors: ['capacitors.yml']
+  Menus: ['menus.yml']
+  Machines: ['machines.yml']
+  Generators: ['generators.yml']
+  SolarGenerators: ['solar_generators.yml']
+  MaterialGenerators: ['mat_generators.yml']
+  RecipeMachines: ['recipe_machines.yml']
+  SimpleMachines: ['simple_machines.yml']
+  MultiblockMachines: ['mb_machines.yml']
+  Researches: ['researches.yml']
+# 最多打印多少bug
+MaxPrintBug: 100
+# 最多打印多少Warn
+MaxPrintWarn: 100
+# 你应该在这里填粘液物品路径（default指向 ../../../Slimefun/Items.yml）
+# ex: SlimefunItemsPath: 'D:/plugins/Slimefun/Items.yml'
+SlimefunItemsPath: 'default'

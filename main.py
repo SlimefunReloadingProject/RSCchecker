@@ -681,17 +681,23 @@ def checkMenus():
         global i, position
         position = f'menus: {scan_file} 的 {i} '
         loadReg(data, position)
-        dtitle = data.get('title', missing)
-        if dtitle == missing:
-            report(position+'的 title')
-            error("缺少 title！")
-        slots = data['slots']
-        for slot in slots:
-            s = slots[slot]
-            isItem(s, position+f'的 {slot}')
-            progressbar = s.get('progressbar', False)
-            isbool(progressbar, 'progressbar', position)
-        machines_slots[i] = slot_read(slots, position+'的 slots')
+        dimport = data.get('import', missing)
+        if dimport == missing:
+            dtitle = data.get('title', missing)
+            if dtitle == missing:
+                report(position+'的 title')
+                error("缺少 title！")
+            slots = data['slots']
+            for slot in slots:
+                s = slots[slot]
+                isItem(s, position+f'的 {slot}')
+                progressbar = s.get('progressbar', False)
+                isbool(progressbar, 'progressbar', position)
+            machines_slots[i] = slot_read(slots, position+'的 slots')
+        else:
+            if dimport not in machines_slots:
+                report(position+'的 import')
+                error(f'{dimport} 不是有效的机器菜单')
 
     lateinits = set()
     for scan_file in files['Menus']:

@@ -20,8 +20,6 @@ ignores:
   ignoreMultiblockMachines: false
   ignoreResearches: false
 
-  # 检查完多方块结构后 再检查可能没有问题的物品
-  ignorePerhapedRecipeType: false
 # 扫描哪些文件
 scan-files:
   # 你应该在这里填路径

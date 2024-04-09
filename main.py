@@ -5,9 +5,9 @@ import yaml
 
 from time import time
 
-_VERSION = '1.0 REALEASE'
+_VERSION = '1.1 SHOT'
 MAXINT = 2147483647
-recipe_types = set("ENHANCED_CRAFTING_TABLE, MAGIC_WORKBENCH, ARMOR_FORGE, COMPRESSOR, PRESSURE_CHAMBER, SMELTERY, ORE_CRUSHER, GRIND_STONE, ANCIENT_ALTAR, NONE".split(', '))
+recipe_types = set("ENHANCED_CRAFTING_TABLE, MAGIC_WORKBENCH, ARMOR_FORGE, COMPRESSOR, PRESSURE_CHAMBER, SMELTERY, ORE_CRUSHER, GRIND_STONE, ANCIENT_ALTAR, NONE, GEO_MINER".split(', '))
 BIOMES = set("BADLANDS  BAMBOO_JUNGLE  BASALT_DELTAS  BEACH  BIRCH_FOREST  CHERRY_GROVE  COLD_OCEAN  CRIMSON_FOREST  CUSTOM DARK_FOREST  DEEP_COLD_OCEAN  DEEP_DARK  DEEP_FROZEN_OCEAN  DEEP_LUKEWARM_OCEAN  DEEP_OCEAN  DESERT  DRIPSTONE_CAVES  END_BARRENS  END_HIGHLANDS  END_MIDLANDS  ERODED_BADLANDS  FLOWER_FOREST  FOREST  FROZEN_OCEAN  FROZEN_PEAKS  FROZEN_RIVER  GROVE  ICE_SPIKES  JAGGED_PEAKS  JUNGLE  LUKEWARM_OCEAN  LUSH_CAVES  MANGROVE_SWAMP  MEADOW  MUSHROOM_FIELDS  NETHER_WASTES  OCEAN  OLD_GROWTH_BIRCH_FOREST  OLD_GROWTH_PINE_TAIGA  OLD_GROWTH_SPRUCE_TAIGA  PLAINS  RIVER  SAVANNA  SAVANNA_PLATEAU  SMALL_END_ISLANDS  SNOWY_BEACH  SNOWY_PLAINS  SNOWY_SLOPES  SNOWY_TAIGA  SOUL_SAND_VALLEY  SPARSE_JUNGLE  STONY_PEAKS  STONY_SHORE  SUNFLOWER_PLAINS  SWAMP  TAIGA  THE_END  THE_VOID  WARM_OCEAN  WARPED_FOREST  WINDSWEPT_FOREST  WINDSWEPT_GRAVELLY_HILLS  WINDSWEPT_HILLS  WINDSWEPT_SAVANNA  WOODED_BADLANDS  OTHERS".split('  '))
 sounds = set('ANCIENT_ALTAR_FINISH_SOUND ANCIENT_ALTAR_ITEM_CHECK_SOUND ANCIENT_ALTAR_ITEM_DROP_SOUND ANCIENT_ALTAR_ITEM_PICK_UP_SOUND ANCIENT_ALTAR_START_SOUND ANCIENT_PEDESTAL_ITEM_PLACE_SOUND ARMOR_FORGE_FINISH_SOUND ARMOR_FORGE_WORKING_SOUND AUTO_CRAFTER_GUI_CLICK_SOUND AUTO_CRAFTER_UPDATE_RECIPE AUTOMATED_PANNING_MACHINE_FAIL_SOUND AUTOMATED_PANNING_MACHINE_SUCCESS_SOUND BACKPACK_CLOSE_SOUND BACKPACK_OPEN_SOUND BEE_BOOTS_FALL_SOUND COMPOSTER_COMPOST_SOUND COMPRESSOR_CRAFT_CONTRACT_SOUND COMPRESSOR_CRAFT_EXTEND_SOUND COMPRESSOR_CRAFT_SOUND COOLER_CONSUME_SOUND CRUCIBLE_ADD_LAVA_SOUND CRUCIBLE_ADD_WATER_SOUND CRUCIBLE_BLOCK_BREAK_SOUND CRUCIBLE_GENERATE_LIQUID_SOUND CRUCIBLE_INTERACT_SOUND CRUCIBLE_PLACE_LAVA_SOUND CRUCIBLE_PLACE_WATER_SOUND DEBUG_FISH_CLICK_SOUND DIET_COOKIE_CONSUME_SOUND ELYTRA_CAP_IMPACT_SOUND ENCHANTMENT_RUNE_ADD_ENCHANT_SOUND ENDER_BACKPACK_OPEN_SOUND ENHANCED_CRAFTING_TABLE_CRAFT_SOUND EXPLOSIVE_BOW_HIT_SOUND EXPLOSIVE_TOOL_EXPLODE_SOUND FISHERMAN_ANDROID_FISHING_SOUND FLASK_OF_KNOWLEDGE_FILLUP_SOUND GPS_NETWORK_ADD_WAYPOINT GPS_NETWORK_CREATE_WAYPOINT GPS_NETWORK_OPEN_PANEL_SOUND GRIND_STONE_INTERACT_SOUND GUIDE_BUTTON_CLICK_SOUND GUIDE_CONTRIBUTORS_OPEN_SOUND GUIDE_LANGUAGE_OPEN_SOUND GUIDE_OPEN_SETTING_SOUND IGNITION_CHAMBER_USE_FLINT_AND_STEEL_SOUND INFUSED_HOPPER_TELEPORT_SOUND INFUSED_MAGNET_TELEPORT_SOUND IRON_GOLEM_ASSEMBLER_ASSEMBLE_SOUND JETBOOTS_THRUST_SOUND JETPACK_THRUST_SOUND JUICER_USE_SOUND LIMITED_USE_ITEM_BREAK_SOUND MAGIC_SUGAR_CONSUME_SOUND MAGIC_WORKBENCH_FINISH_SOUND MAGIC_WORKBENCH_START_ANIMATION_SOUND MAGICAL_EYE_OF_ENDER_USE_SOUND MINER_ANDROID_BLOCK_GENERATION_SOUND MINING_TASK_SOUND ORE_WASHER_WASH_SOUND PLAYER_RESEARCHING_SOUND PORTABLE_CRAFTER_OPEN_SOUND PORTABLE_DUSTBIN_OPEN_SOUND PRESSURE_CHAMBER_FINISH_SOUND PRESSURE_CHAMBER_WORKING_SOUND PROGRAMMABLE_ANDROID_SCRIPT_DOWNLOAD_SOUND SLIME_BOOTS_FALL_SOUND SMELTERY_CRAFT_SOUND SOULBOUND_RUNE_RITUAL_SOUND SPLINT_CONSUME_SOUND STOMPER_BOOTS_STOMP_SOUND TAPE_MEASURE_MEASURE_SOUND TELEPORT_SOUND TELEPORT_UPDATE_SOUND TELEPORTATION_MANAGER_OPEN_GUI TOME_OF_KNOWLEDGE_USE_SOUND VAMPIRE_BLADE_HEALING_SOUND VANILLA_AUTO_CRAFTER_UPDATE_RECIPE_SOUND VILLAGER_RUNE_TRANSFORM_SOUND VITAMINS_CONSUME_SOUND WIND_STAFF_USE_SOUND'.split(' '))
 missing = '__MISSING_STRING_RSCCHECKER'
@@ -15,7 +15,6 @@ missing = '__MISSING_STRING_RSCCHECKER'
 saveditems = set()
 parentsGroups = set()
 normalGroups = set()
-multiblock_types = set()
 items = set()
 default_recipe = [{'material_type': 'none'}]*9
 machines_slots = {}
@@ -28,17 +27,29 @@ r = range(1, 10)
 
 
 class color:
-    # Text color                          Background color
-    black = '\33[30m'                   ; bblack = '\33[40m'
-    red = '\33[31m'                     ; bred = '\33[41m'
-    green = '\33[32m'                   ; bgreen = '\33[42m'
-    gold = '\33[33m'                    ; bgold = '\33[43m'
-    blue = '\33[34m'                    ; bblue = '\33[44m'
-    purple = '\33[35m'                  ; bpurple = '\33[45m'
-    cyan = '\33[36m'                    ; bcyan = '\33[46m'
-    lightgray = lightgrey = '\33[37m'   ; blightgray = blightgrey = '\33[47m'
-    gray = grey = '\33[38m'             ; bgray = bgrey = '\33[48m'
-    white = reset = '\33[39m'           ; bwhite = '\33[49m'
+    # Text color                          
+    black = '\33[30m'
+    red = '\33[31m'
+    green = '\33[32m'
+    gold = '\33[33m'
+    blue = '\33[34m'
+    purple = '\33[35m'
+    cyan = '\33[36m'
+    lightgray = lightgrey = '\33[37m'
+    gray = grey = '\33[38m'
+    white = reset = '\33[39m'
+
+    # Background color
+    bblack = '\33[40m'
+    bred = '\33[41m'
+    bgreen = '\33[42m'
+    bgold = '\33[43m'
+    bblue = '\33[44m'
+    bpurple = '\33[45m'
+    bcyan = '\33[46m'
+    blightgray = blightgrey = '\33[47m'
+    bgray = bgrey = '\33[48m'
+    bwhite = '\33[49m'
 
 
 def error(string, end='\n'):
@@ -50,22 +61,22 @@ def warn(string, end='\n'):
     print(f'{color.gold}{string}{color.reset}', end=end)
 
 
-def report(i, Warn=False):
+def report(position, Warn=False):
     global config, totalBug, totalWarn, MaxBug, MaxWarn
     if Warn and totalWarn == MaxWarn:
         totalWarn += 1
-        error(f"[Warn]{totalWarn}. 在 {i}:", end="\n  ")
-        error(f"[Warn] Warn打印数量已达到上限！")
+        error(f"[Warn]{totalWarn}. 在 {position}:", end="\n  ")
+        error("[Warn] Warn打印数量已达到上限！")
     elif Warn and totalWarn < MaxWarn:
         totalWarn += 1
-        warn(f"[WARN]{totalWarn}. 在 {i}:", end="\n  ")
+        warn(f"[WARN]{totalWarn}. 在 {position}:", end="\n  ")
     elif totalBug == MaxBug:
         totalBug += 1
-        error(f"[BUG]{totalBug}. 在 {i}:", end="\n  ")
-        error(f"[BUG] Bug数量已达到上限！请修复以上Bug再运行本程序！")
+        error(f"[BUG]{totalBug}. 在 {position}:", end="\n  ")
+        error("[BUG] Bug数量已达到上限！请修复以上Bug再运行本程序！")
     elif totalBug < MaxBug:
         totalBug += 1
-        error(f"[BUG]{totalBug}. 在 {i}:", end="\n  ")
+        error(f"[BUG]{totalBug}. 在 {position}:", end="\n  ")
 
 
 def printc(string):
@@ -283,7 +294,7 @@ def isRecipe(data, position):
             }
         else:
             report(position, True)
-            warn(f"{i}是无效的编号，有效编号是1-9的数字，此编号会被无视")
+            warn(f"{bvar}是无效的编号，有效编号是1-9的数字，此编号会被无视")
     if recipe_type == missing:
         if recipe != default_recipe:
             report(position)
@@ -376,14 +387,6 @@ def isGroup(group, position):
 def isRecipeType(recipe_type, position):
     if recipe_type not in recipe_types:
         lateinit_recipe_type[position] = recipe_type
-
-
-def checkPerhapedRecipeType():
-    printc('Checking last')
-    for position, recipe_type in lateinit_recipe_type.items():
-        if recipe_type not in multiblock_types and recipe_type != 'GEO_MINER':
-            report(position+'recipe_type')
-            error(f'{recipe_type} 不是有效的配方类型')
 
 
 def inSlots(name, slots, position, status_slot=-1):
@@ -1088,7 +1091,6 @@ def checkMultiblockMachines():
                 isItem(ri, position+f'的 input 的 {o}')
             recipe_output = recipe['output']
             isItem(recipe_output, position+'的 output')
-        multiblock_types.add(i)
         items.add(i)
 
     lateinits = set()
@@ -1198,8 +1200,7 @@ try:
         int if ignores['ignoreRecipeMachines'] else checkRecipeMachines,
         int if ignores['ignoreSimpleMachines'] else checkSimpleMachines,
         int if ignores['ignoreMultiblockMachines'] else checkMultiblockMachines,
-        int if ignores['ignoreResearches'] else checkResearches,
-        int if ignores['ignorePerhapedRecipeType'] else checkPerhapedRecipeType
+        int if ignores['ignoreResearches'] else checkResearches
     ]
     RewriteSlimefunItems()
     SlimefunItems = set(getSlimefunItems())

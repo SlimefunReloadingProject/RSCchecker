@@ -5,10 +5,11 @@
 ignores:
   # 填 true 或 false
   ignoreGroups: false
-  ignoreRecipeType: false
+  ignoreRecipeTypes: false
   ignoreGeoResources: false
   ignoreMobDrops: false
   ignoreItems: false
+  ignoreArmors: false
   ignoreCapacitors: false
   ignoreMenus: false
   ignoreMachines: false
@@ -24,12 +25,15 @@ ignores:
 scan-files:
   # 你应该在这里填路径
   # ex: Groups: ['groups.yml','D:/groups.yml', 'C:/groups.yml', 'groups2.yml'] 
+  #     addons: ['example', 'slimefunExpansion']
   # 诸如此类 ↑
+  addons: ['example']
   Groups: ['groups.yml']
-  RecipeType: ['recipe_types.yml']
+  RecipeTypes: ['recipe_types.yml']
   GeoResources: ['geo_resources.yml']
   MobDrops: ['mob_drops.yml']
   Items: ['items.yml']
+  Armors: ['armors.yml']
   Capacitors: ['capacitors.yml']
   Menus: ['menus.yml']
   Machines: ['machines.yml']
@@ -44,6 +48,6 @@ scan-files:
 MaxPrintBug: 100
 # 最多打印多少Warn
 MaxPrintWarn: 100
-# 你应该在这里填粘液物品路径（default指向 ../../../Slimefun/Items.yml）
+# 你应该在这里填粘液物品路径（default指向 ../../Slimefun/Items.yml）
 # ex: SlimefunItemsPath: 'D:/plugins/Slimefun/Items.yml'
 SlimefunItemsPath: 'default'

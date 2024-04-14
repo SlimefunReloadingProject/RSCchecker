@@ -5,7 +5,7 @@ import yaml
 
 from time import time
 
-_VERSION = '1.1 SHOT'
+_VERSION = '1.1 REALEASE'
 MAXINT = 2147483647
 recipe_types = set("ENHANCED_CRAFTING_TABLE, MAGIC_WORKBENCH, ARMOR_FORGE, COMPRESSOR, PRESSURE_CHAMBER, SMELTERY, ORE_CRUSHER, GRIND_STONE, ANCIENT_ALTAR, NONE, GEO_MINER".split(', '))
 BIOMES = set("BADLANDS  BAMBOO_JUNGLE  BASALT_DELTAS  BEACH  BIRCH_FOREST  CHERRY_GROVE  COLD_OCEAN  CRIMSON_FOREST  CUSTOM DARK_FOREST  DEEP_COLD_OCEAN  DEEP_DARK  DEEP_FROZEN_OCEAN  DEEP_LUKEWARM_OCEAN  DEEP_OCEAN  DESERT  DRIPSTONE_CAVES  END_BARRENS  END_HIGHLANDS  END_MIDLANDS  ERODED_BADLANDS  FLOWER_FOREST  FOREST  FROZEN_OCEAN  FROZEN_PEAKS  FROZEN_RIVER  GROVE  ICE_SPIKES  JAGGED_PEAKS  JUNGLE  LUKEWARM_OCEAN  LUSH_CAVES  MANGROVE_SWAMP  MEADOW  MUSHROOM_FIELDS  NETHER_WASTES  OCEAN  OLD_GROWTH_BIRCH_FOREST  OLD_GROWTH_PINE_TAIGA  OLD_GROWTH_SPRUCE_TAIGA  PLAINS  RIVER  SAVANNA  SAVANNA_PLATEAU  SMALL_END_ISLANDS  SNOWY_BEACH  SNOWY_PLAINS  SNOWY_SLOPES  SNOWY_TAIGA  SOUL_SAND_VALLEY  SPARSE_JUNGLE  STONY_PEAKS  STONY_SHORE  SUNFLOWER_PLAINS  SWAMP  TAIGA  THE_END  THE_VOID  WARM_OCEAN  WARPED_FOREST  WINDSWEPT_FOREST  WINDSWEPT_GRAVELLY_HILLS  WINDSWEPT_HILLS  WINDSWEPT_SAVANNA  WOODED_BADLANDS  OTHERS".split('  '))
@@ -260,7 +260,7 @@ def isItem(data, position):
     did = data.get('material', missing)
     if dtype == 'mc':
         isVanilla(did, position+'的 material_type')
-    elif dtype in ('full_slimefun', 'slimefun'):
+    elif dtype == 'slimefun':
         isSlimefun(did, position+'的 material_type')
     elif dtype == 'saveditem':
         isSaveditem(did, position+'的 material_type')
@@ -269,7 +269,7 @@ def isItem(data, position):
         error('缺少参数 material')
     elif dtype not in ('none', 'skull_base64', 'skull_url', 'skull_hash'):
         report(position+'的 material_type')
-        error('type 只能是 mc、 slimefun、 full_slimefun、 saveditem、 none、 skull_base64、 skull_url 或 skull_hash！')
+        error('type 只能是 mc、 slimefun、 saveditem、 none、 skull_base64、 skull_url 或 skull_hash！')
     dam = data.get('amount', 1)
     isAmountProper(did, dam, position+'的 amount')
 
@@ -655,7 +655,7 @@ def checkCapacitors():
         ditem = data['item']
         isItem(ditem, position+'的 item')
         dcapacity = data['capacity']
-        isInt(dcapacity, position+'的 capacity')
+        isInt(dcapacity, position+'的 capacity', 1)
         isRecipe(data, position+'的 recipe')
         items.add(i)
         
@@ -744,10 +744,10 @@ def checkMachines():
         energy = data.get('energy', missing)
         position += '的 energy '
         if energy != missing:
-            dcapacity = energy.get('capacity', 1)
+            dcapacity = energy.get('capacity', 0)
             isInt(dcapacity, position+'的 capacity')
-            dtotalticks = energy.get('totalTicks', 1)
-            isInt(dtotalticks, position+'的 totalTicks')
+            dtotalticks = energy['totalTicks']
+            isInt(dtotalticks, position+'的 totalTicks', 1)
             dtype = energy.get('type', 'NONE')
             if dtype not in ('CAPACITOR', 'CONNECTOR', 'CONSUMER', 'GENERATOR', 'NONE'):
                 report(position+'的 type')
@@ -781,16 +781,16 @@ def checkGenerators():
         position = f'generators: {scan_file} 的 {i} '
         loadReg(data, position)
         dgroup = data['item_group']
-        isGroup(dgroup, position+'的 item_group')
+        isGroup(dgroup, position+'的 item_group ')
         ditem = data['item']
-        isItem(ditem, position+'的 item')
-        isRecipe(data, position+'的 recipe')
+        isItem(ditem, position+'的 item ')
+        isRecipe(data, position+'的 recipe ')
         ioput = data['input'] + data['output']
-        inSlots(i, ioput, position+'的 input 或 output')
-        dcapacity = data['capacity']
+        inSlots(i, ioput, position+'的 input 或 output ')
+        dcapacity = data.get('capacity', 0)
         isInt(dcapacity, position+'的 capacity')
         dproduction = data['production']
-        isInt(dproduction, position+'的 production')
+        isInt(dproduction, position+'的 production', 1)
         fuels = data['fuels']
         position += '的 fuels '
         for recipe in fuels.values():
@@ -834,11 +834,11 @@ def checkSolarGenerators():
         isItem(ditem, position+'的 item')
         isRecipe(data, position+'的 recipe')
         dcapacity = data['capacity']
-        isInt(dcapacity, position+'的 capacity')
+        isInt(dcapacity, position+'的 capacity', 1)
         dday = data['dayEnergy']
-        isInt(dday, position+'的 dayEnergy')
+        isInt(dday, position+'的 dayEnergy', 1)
         dnight = data['nightEnergy']
-        isInt(dnight, position+'的 nightEnergy')
+        isInt(dnight, position+'的 nightEnergy', 1)
         dlight = data['lightLevel']
         isInt(dlight, position+'的 lightLevel', 0, 15)
         items.add(i)
@@ -875,17 +875,17 @@ def checkMaterialGenerators():
         isItem(ditem, position+'的 item')
         isRecipe(data, position+'的 recipe')
         dcapacity = data['capacity']
-        isInt(dcapacity, position+'的 capacity')
+        isInt(dcapacity, position+'的 capacity', 1)
         outputItem = data['outputItem']
         isItem(outputItem, position+'的 outputItem')
         tickrate = data['tickRate']
-        isInt(tickrate, position+'的 tickRate')
+        isInt(tickrate, position+'的 tickRate', 1)
         status_slot = data['status']
         isInt(status_slot, position+'的 status', 0, 53)
         output = data['output']
         inSlots(i, output, position+'的 output', status_slot)
         per = data['per']
-        isInt(per, position+'的 per')
+        isInt(per, position+'的 per', 1)
         items.add(i)
     
     lateinits = set()
@@ -924,11 +924,14 @@ def checkRecipeMachines():
         ioput = dinput + doutput
         inSlots(i, ioput, position+'的 input 或 output')
         dcapacity = data['capacity']
-        isInt(dcapacity, position+'的 capacity')
+        isInt(dcapacity, position+'的 capacity', 1)
         depc = data['energyPerCraft']
-        isInt(depc, position+'的 energyPerCraft')
+        isInt(depc, position+'的 energyPerCraft', 1)
+        if dcapacity < depc:
+            report(position)
+            error('合成一次的消耗能量不能大于能量容量！')
         speed = data['speed']
-        isInt(speed, position+'的 speed')
+        isInt(speed, position+'的 speed', 1)
         leninput = len(dinput)
         lenoutput = len(doutput)
         recipes = data['recipes']
@@ -936,7 +939,7 @@ def checkRecipeMachines():
         for key, recipe in recipes.items():
             position = position + f'的 {key} '
             seconds = recipe['seconds']
-            isInt(seconds, position+'的 seconds')
+            isInt(seconds, position+'的 seconds', 1)
             chooseOne = recipe.get('chooseOne', False)
             isbool(chooseOne, 'chooseOne', position)
             temp = {}
@@ -1021,11 +1024,13 @@ def checkSimpleMachines():
         isRecipe(data, position+'的 recipe')
         settings = data['settings']
         dcapacity = settings['capacity']
-        isInt(dcapacity, position+'的 settings 的 capacity')
+        isInt(dcapacity, position+'的 settings 的 capacity', 1)
         dconsumption = settings['consumption']
-        isInt(dconsumption, position+'的 settings 的 consumption')
-        dspeed = settings['speed']
-        isInt(dspeed, position+'的 settings 的 speed')
+        isInt(dconsumption, position+'的 settings 的 consumption', 1)
+        dspeed = settings.get('speed', 1)
+        isInt(dspeed, position+'的 settings 的 speed', 1)
+        dradius = settings.get('radius', 1)
+        isInt(dradius, position+'的 settings 的 radius', 1)
         dtype = data['type']
         if dtype not in ('ELECTRIC_SMELTERY', 'ELECTRIC_FURNACE', 'ELECTRIC_GOLD_PAN', 'ELECTRIC_DUST_WASHER', 'ELECTRIC_ORE_GRINDER', 'ELECTRIC_INGOT_FACTORY', 'ELECTRIC_INGOT_PULVERIZER', 'CHARGING_BENCH'):
             report(position+'的 type')

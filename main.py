@@ -5,9 +5,9 @@ import yaml
 
 from time import time
 
-_VERSION = '1.1 REALEASE'
+_VERSION = '1.3 SHOT'
 MAXINT = 2147483647
-recipe_types = set("ENHANCED_CRAFTING_TABLE, MAGIC_WORKBENCH, ARMOR_FORGE, COMPRESSOR, PRESSURE_CHAMBER, SMELTERY, ORE_CRUSHER, GRIND_STONE, ANCIENT_ALTAR, NONE, GEO_MINER".split(', '))
+recipe_types = set("ENHANCED_CRAFTING_TABLE, MAGIC_WORKBENCH, ARMOR_FORGE, COMPRESSOR, PRESSURE_CHAMBER, SMELTERY, ORE_CRUSHER, GRIND_STONE, ANCIENT_ALTAR, NULL, GEO_MINER".split(', '))
 BIOMES = set("BADLANDS  BAMBOO_JUNGLE  BASALT_DELTAS  BEACH  BIRCH_FOREST  CHERRY_GROVE  COLD_OCEAN  CRIMSON_FOREST  CUSTOM DARK_FOREST  DEEP_COLD_OCEAN  DEEP_DARK  DEEP_FROZEN_OCEAN  DEEP_LUKEWARM_OCEAN  DEEP_OCEAN  DESERT  DRIPSTONE_CAVES  END_BARRENS  END_HIGHLANDS  END_MIDLANDS  ERODED_BADLANDS  FLOWER_FOREST  FOREST  FROZEN_OCEAN  FROZEN_PEAKS  FROZEN_RIVER  GROVE  ICE_SPIKES  JAGGED_PEAKS  JUNGLE  LUKEWARM_OCEAN  LUSH_CAVES  MANGROVE_SWAMP  MEADOW  MUSHROOM_FIELDS  NETHER_WASTES  OCEAN  OLD_GROWTH_BIRCH_FOREST  OLD_GROWTH_PINE_TAIGA  OLD_GROWTH_SPRUCE_TAIGA  PLAINS  RIVER  SAVANNA  SAVANNA_PLATEAU  SMALL_END_ISLANDS  SNOWY_BEACH  SNOWY_PLAINS  SNOWY_SLOPES  SNOWY_TAIGA  SOUL_SAND_VALLEY  SPARSE_JUNGLE  STONY_PEAKS  STONY_SHORE  SUNFLOWER_PLAINS  SWAMP  TAIGA  THE_END  THE_VOID  WARM_OCEAN  WARPED_FOREST  WINDSWEPT_FOREST  WINDSWEPT_GRAVELLY_HILLS  WINDSWEPT_HILLS  WINDSWEPT_SAVANNA  WOODED_BADLANDS  OTHERS".split('  '))
 sounds = set('ANCIENT_ALTAR_FINISH_SOUND ANCIENT_ALTAR_ITEM_CHECK_SOUND ANCIENT_ALTAR_ITEM_DROP_SOUND ANCIENT_ALTAR_ITEM_PICK_UP_SOUND ANCIENT_ALTAR_START_SOUND ANCIENT_PEDESTAL_ITEM_PLACE_SOUND ARMOR_FORGE_FINISH_SOUND ARMOR_FORGE_WORKING_SOUND AUTO_CRAFTER_GUI_CLICK_SOUND AUTO_CRAFTER_UPDATE_RECIPE AUTOMATED_PANNING_MACHINE_FAIL_SOUND AUTOMATED_PANNING_MACHINE_SUCCESS_SOUND BACKPACK_CLOSE_SOUND BACKPACK_OPEN_SOUND BEE_BOOTS_FALL_SOUND COMPOSTER_COMPOST_SOUND COMPRESSOR_CRAFT_CONTRACT_SOUND COMPRESSOR_CRAFT_EXTEND_SOUND COMPRESSOR_CRAFT_SOUND COOLER_CONSUME_SOUND CRUCIBLE_ADD_LAVA_SOUND CRUCIBLE_ADD_WATER_SOUND CRUCIBLE_BLOCK_BREAK_SOUND CRUCIBLE_GENERATE_LIQUID_SOUND CRUCIBLE_INTERACT_SOUND CRUCIBLE_PLACE_LAVA_SOUND CRUCIBLE_PLACE_WATER_SOUND DEBUG_FISH_CLICK_SOUND DIET_COOKIE_CONSUME_SOUND ELYTRA_CAP_IMPACT_SOUND ENCHANTMENT_RUNE_ADD_ENCHANT_SOUND ENDER_BACKPACK_OPEN_SOUND ENHANCED_CRAFTING_TABLE_CRAFT_SOUND EXPLOSIVE_BOW_HIT_SOUND EXPLOSIVE_TOOL_EXPLODE_SOUND FISHERMAN_ANDROID_FISHING_SOUND FLASK_OF_KNOWLEDGE_FILLUP_SOUND GPS_NETWORK_ADD_WAYPOINT GPS_NETWORK_CREATE_WAYPOINT GPS_NETWORK_OPEN_PANEL_SOUND GRIND_STONE_INTERACT_SOUND GUIDE_BUTTON_CLICK_SOUND GUIDE_CONTRIBUTORS_OPEN_SOUND GUIDE_LANGUAGE_OPEN_SOUND GUIDE_OPEN_SETTING_SOUND IGNITION_CHAMBER_USE_FLINT_AND_STEEL_SOUND INFUSED_HOPPER_TELEPORT_SOUND INFUSED_MAGNET_TELEPORT_SOUND IRON_GOLEM_ASSEMBLER_ASSEMBLE_SOUND JETBOOTS_THRUST_SOUND JETPACK_THRUST_SOUND JUICER_USE_SOUND LIMITED_USE_ITEM_BREAK_SOUND MAGIC_SUGAR_CONSUME_SOUND MAGIC_WORKBENCH_FINISH_SOUND MAGIC_WORKBENCH_START_ANIMATION_SOUND MAGICAL_EYE_OF_ENDER_USE_SOUND MINER_ANDROID_BLOCK_GENERATION_SOUND MINING_TASK_SOUND ORE_WASHER_WASH_SOUND PLAYER_RESEARCHING_SOUND PORTABLE_CRAFTER_OPEN_SOUND PORTABLE_DUSTBIN_OPEN_SOUND PRESSURE_CHAMBER_FINISH_SOUND PRESSURE_CHAMBER_WORKING_SOUND PROGRAMMABLE_ANDROID_SCRIPT_DOWNLOAD_SOUND SLIME_BOOTS_FALL_SOUND SMELTERY_CRAFT_SOUND SOULBOUND_RUNE_RITUAL_SOUND SPLINT_CONSUME_SOUND STOMPER_BOOTS_STOMP_SOUND TAPE_MEASURE_MEASURE_SOUND TELEPORT_SOUND TELEPORT_UPDATE_SOUND TELEPORTATION_MANAGER_OPEN_GUI TOME_OF_KNOWLEDGE_USE_SOUND VAMPIRE_BLADE_HEALING_SOUND VANILLA_AUTO_CRAFTER_UPDATE_RECIPE_SOUND VILLAGER_RUNE_TRANSFORM_SOUND VITAMINS_CONSUME_SOUND WIND_STAFF_USE_SOUND'.split(' '))
 RainbowTypes = set('GLASS_PANE, GLASS, STAINED_GLASS, STAINED_GLASS_PANE, WOOL, TERRACOTTA, CUSTOM, GLAZED_TERRACOTTA, TERRACOTTA_ALL'.split(', '))
@@ -15,12 +15,13 @@ simpleMachinesTypes = set(('ELECTRIC_SMELTERY', 'ELECTRIC_FURNACE', 'ELECTRIC_GO
 protection_types = ['BEES', 'RADIATION', 'FLYING_INTO_WALL']
 armor_levels = ['LEATHER', 'CHAINMAIL', 'IRON', 'DIAMOND', 'GOLDEN', 'NETHERITE']
 effects = {'SPEED', 'SLOWNESS', 'HASTE', 'MINING_FATIGUE', 'STRENGTH', 'INSTANT_HEALTH', 'INSTANT_DAMAGE', 'JUMP_BOOST', 'NAUSEA', 'REGENERATION', 'RESISTANCE', 'FIRE_RESISTANCE', 'WATER_BREATHING', 'INVISIBILITY', 'BLINDNESS', 'NIGHT_VISION', 'HUNGER', 'WEAKNESS', 'POISON', 'WITHER', 'HEALTH_BOOST', 'ABSORPTION', 'SATURATION', 'GLOWING', 'LEVITATION', 'LUCK', 'UNLUCK', 'SLOW_FALLING', 'CONDUIT_POWER', 'DOLPHINS_GRACE', 'BAD_OMEN', 'HERO_OF_THE_VILLAGE', 'DARKNESS'}
-bhelmets = [level+'HELMET' for level in armor_levels]
-bchestplates = [level+'CHESTPLATE' for level in armor_levels]
-bleggings = [level+'LEGGINGS' for level in armor_levels]
-bboots = [level+'BOOTS' for level in armor_levels]
+bhelmets = [level+'_HELMET' for level in armor_levels]
+bchestplates = [level+'_CHESTPLATE' for level in armor_levels]
+bleggings = [level+'_LEGGINGS' for level in armor_levels]
+bboots = [level+'_BOOTS' for level in armor_levels]
 
 bhelmets.append('TURTLE_HELMET')
+bchestplates.append('ELYTRA')
 missing = '__MISSING_STRING_RSCCHECKER'
 radiation_levels = {'HIGH', 'LOW', 'MODERATE', 'VERY_HIGH', 'VERY_DEADLY', missing}
 
@@ -301,9 +302,10 @@ def isRecipe(data, position):
     for bvar in load_recipe:
         if bvar in r:
             isItem(load_recipe[bvar], f'{position} 的 {bvar} ')
+            item = load_recipe.get('material', missing)
             recipe[bvar-1] = {
-                'material_type': load_recipe.get('material_type', 'mc'),
-                'material': load_recipe.get('material', 'none'),
+                'material': item,
+                'material_type': load_recipe.get('material_type', 'mc' if item != missing else 'none'),
                 'amount': load_recipe.get('amount', 1)
             }
         else:
@@ -314,7 +316,7 @@ def isRecipe(data, position):
             report(position)
             error('缺少 recipe_type')
         else:
-            recipe_type = 'none'
+            recipe_type = 'NULL'
     else:
         isRecipeType(recipe_type, position)
     idx = 1
@@ -323,25 +325,21 @@ def isRecipe(data, position):
             if k['material_type'] != 'none' and k['amount'] != 1:
                 report(position+f'的 crafting-recipe 的 第 {idx} 个物品')
                 error('amount 必须为 1')
-                break
             idx += 1
     elif recipe_type in {'COMPRESSOR', 'PRESSURE_CHAMBER', 'ORE_CRUSHER', 'GRIND_STONE'}:
         for k in recipe[1:]:
-            if k['material_type'] != 'none':
+            if k['material_type'] != 'none' and k['material'] != missing:
                 report(position+f'的 crafting-recipe 的 第 {idx} 个物品')
                 error(f"第{idx}槽必须为 none 类型")
-                break
             idx += 1 
     elif recipe_type == "ANCIENT_ALTAR":
         for k in recipe:
-            if k['material_type'] == 'none':
+            if k['material_type'] == 'none' and k['material'] != missing:
                 report(position+f'的 crafting-recipe 的 第 {idx} 个物品的 type')
                 error(f"第{idx}槽必须不为 none 类型")
-                break
             if k['material_type'] != 'none' and k['amount'] != 1:
                 report(position+f'的 crafting-recipe 的 第 {idx} 个物品的 type')
                 error(f"第{idx}槽的 amount 必须为 1")
-                break
             idx += 1
     elif recipe_type == "SMELTERY":
         sum_dict = {}
@@ -513,10 +511,11 @@ def checkGroups():
                 lateinits.add(i)
                 continue
             check(data)
-
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
+    yield
 
 
 def checkRecipeTypes():
@@ -541,15 +540,16 @@ def checkRecipeTypes():
                 lateinits.add(i)
                 continue
             check(data)
-
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
+    yield
 
 
 def checkGeoResources():
     global i, position
-    
+
     def check(data):
         global i, position
         # necessary
@@ -598,10 +598,11 @@ def checkGeoResources():
                 lateinits.add(i)
                 continue
             check(data)
-
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
+    yield
 
 
 def checkMobDrops():
@@ -637,9 +638,11 @@ def checkMobDrops():
                 continue
             check(data)
 
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
+    yield
 
 
 def checkItems():
@@ -689,7 +692,7 @@ def checkItems():
         isInt(piglin_trade_chance, position+'的 piglin_trade 的 piglin_trade_chance')
 
         items.add(i)
-        
+    
     lateinits = set()
     for scan_file in files['Items']:
         printc(f'Loading items: {scan_file}')
@@ -702,10 +705,11 @@ def checkItems():
                 lateinits.add(i)
                 continue
             check(data)
-
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
+    yield
 
 
 def checkArmors():
@@ -765,10 +769,11 @@ def checkArmors():
                 lateinits.add(i)
                 continue
             check(data)
-
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
+    yield
 
 
 def checkCapacitors():
@@ -799,10 +804,11 @@ def checkCapacitors():
                 lateinits.add(i)
                 continue
             check(data)
-
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
+    yield
 
 
 def checkMenus():
@@ -842,10 +848,11 @@ def checkMenus():
                 lateinits.add(i)
                 continue
             check(data)
-
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
+    yield
 
 
 def checkMachines():
@@ -894,11 +901,12 @@ def checkMachines():
                 lateinits.add(i)
                 continue
             check(data)
-
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
-        
+    yield
+
 
 def checkGenerators():
     global i, position
@@ -942,10 +950,11 @@ def checkGenerators():
                 lateinits.add(i)
                 continue
             check(data)
-
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
+    yield
 
 
 def checkSolarGenerators():
@@ -983,10 +992,11 @@ def checkSolarGenerators():
                 lateinits.add(i)
                 continue
             check(data)
-
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
+    yield
 
 
 def checkMaterialGenerators():
@@ -1028,11 +1038,12 @@ def checkMaterialGenerators():
                 lateinits.add(i)
                 continue
             check(data)
-
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
-        
+    yield
+
 
 def checkRecipeMachines():
     global i, position
@@ -1131,10 +1142,11 @@ def checkRecipeMachines():
                 lateinits.add(i)
                 continue
             check(data)
-
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
+    yield
 
 
 def checkSimpleMachines():
@@ -1177,10 +1189,11 @@ def checkSimpleMachines():
                 lateinits.add(i)
                 continue
             check(data)
-
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
+    yield
 
 
 def checkMultiblockMachines():
@@ -1238,15 +1251,16 @@ def checkMultiblockMachines():
                 lateinits.add(i)
                 continue
             check(data)
-
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
+    yield
 
 
 def checkResearches():
     global i, position
-    
+
     def check(data):
         global i, position
         # necessary
@@ -1281,28 +1295,36 @@ def checkResearches():
                 lateinits.add(i)
                 continue
             check(data)
-
+    yield
     for i in lateinits:
         data = k[i]
         check(data)
+    yield
 
 
 def checkAll():
     global i, position
+    chs = []
     for checker in checkers:
-        start = time()
-        try:
-            checker()
-        except (yaml.scanner.ScannerError, yaml.parser.ParserError):
-            error('在获取YAML内容时遇到了错误！')
-            error('可能是YAML结构错误！请在下方网站内检查')
-            error('https://www.bejson.com/validators/yaml_editor/')
-        except KeyError:
-            report(position)
-            error('未找到参数！')
-            error('可能是YAML缺少了参数或参数不完整！')
-            error(f'相关信息 {i} {position}')
-        print(f'{color.green}Spent {time() - start}s')
+        chs.append(checker())
+    try:
+        for __ in range(2):
+            if __ == 1:
+                print(f'{color.gold} loading lateInit items:')
+            for ch in chs:
+                start = time()
+                next(ch)
+                print(f'{color.green}Spent {time() - start}s')
+    except (yaml.scanner.ScannerError, yaml.parser.ParserError):
+        error('在获取YAML内容时遇到了错误！')
+        error('可能是YAML结构错误！请在下方网站内检查')
+        error('https://www.bejson.com/validators/yaml_editor/')
+    except KeyError:
+        report(position)
+        error('未找到参数！')
+        error('可能是YAML缺少了参数或参数不完整！')
+        error(f'相关信息 {i} {position}')
+    
     print(f"{color.cyan}Done! {time() - sum_start}s")
 
 
@@ -1384,7 +1406,8 @@ except BaseException:  # 任何错误
     error('运行程序时遇到了致命错误，请查看错误信息，确定并非自己的问题后，可联系作者修复！')
     error(f'在检查 {i} 时遇到了错误，可能是缺少必需参数！')
     error(f'相关信息 {position}')
-
+finally:
+    1  # nothing to do
 """
 '请确保控制台输出的bug（若有）皆已修复，本程序才能正常运行！'
 '需要注意的是，此脚本并不会检查任何与name或lore相关的内容！'

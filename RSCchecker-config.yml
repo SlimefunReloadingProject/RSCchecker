@@ -45,7 +45,7 @@ scan-files:
   MultiblockMachines: ['mb_machines.yml']
   Researches: ['researches.yml']
 # 最多打印多少bug
-MaxPrintBug: 100
+MaxPrintBug: 1000
 # 最多打印多少Warn
 MaxPrintWarn: 100
 # 你应该在这里填粘液物品路径（default指向 ../../Slimefun/Items.yml）

@@ -13,8 +13,8 @@
 # 使用方式
 
 1. 你的电脑需要安装了`python3.6`或以上
-2. 将全部文件解压到 `plugins/RykenSlimeCustomizer/addons`
-3. 运行 `RSC检查器.bat` ，就可以开始快速检查了
+2. 将全部文件解压到 `plugins/RykenSlimeCustomizer`
+3. 运行 `RSC检查器.bat` 或 `RSC检查器.sh`，就可以开始快速检查了
 
 > 等待运行完毕后，会显示出一些潜在 Bug（若有）
 >

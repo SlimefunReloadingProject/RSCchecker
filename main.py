@@ -5,7 +5,7 @@ import yaml
 
 from time import time
 
-_VERSION = '1.3 SHOT'
+_VERSION = '1.3 REALEASE'
 MAXINT = 2147483647
 recipe_types = set("ENHANCED_CRAFTING_TABLE, MAGIC_WORKBENCH, ARMOR_FORGE, COMPRESSOR, PRESSURE_CHAMBER, SMELTERY, ORE_CRUSHER, GRIND_STONE, ANCIENT_ALTAR, NULL, GEO_MINER".split(', '))
 BIOMES = set("BADLANDS  BAMBOO_JUNGLE  BASALT_DELTAS  BEACH  BIRCH_FOREST  CHERRY_GROVE  COLD_OCEAN  CRIMSON_FOREST  CUSTOM DARK_FOREST  DEEP_COLD_OCEAN  DEEP_DARK  DEEP_FROZEN_OCEAN  DEEP_LUKEWARM_OCEAN  DEEP_OCEAN  DESERT  DRIPSTONE_CAVES  END_BARRENS  END_HIGHLANDS  END_MIDLANDS  ERODED_BADLANDS  FLOWER_FOREST  FOREST  FROZEN_OCEAN  FROZEN_PEAKS  FROZEN_RIVER  GROVE  ICE_SPIKES  JAGGED_PEAKS  JUNGLE  LUKEWARM_OCEAN  LUSH_CAVES  MANGROVE_SWAMP  MEADOW  MUSHROOM_FIELDS  NETHER_WASTES  OCEAN  OLD_GROWTH_BIRCH_FOREST  OLD_GROWTH_PINE_TAIGA  OLD_GROWTH_SPRUCE_TAIGA  PLAINS  RIVER  SAVANNA  SAVANNA_PLATEAU  SMALL_END_ISLANDS  SNOWY_BEACH  SNOWY_PLAINS  SNOWY_SLOPES  SNOWY_TAIGA  SOUL_SAND_VALLEY  SPARSE_JUNGLE  STONY_PEAKS  STONY_SHORE  SUNFLOWER_PLAINS  SWAMP  TAIGA  THE_END  THE_VOID  WARM_OCEAN  WARPED_FOREST  WINDSWEPT_FOREST  WINDSWEPT_GRAVELLY_HILLS  WINDSWEPT_HILLS  WINDSWEPT_SAVANNA  WOODED_BADLANDS  OTHERS".split('  '))
@@ -22,8 +22,8 @@ bboots = [level+'_BOOTS' for level in armor_levels]
 
 bhelmets.append('TURTLE_HELMET')
 bchestplates.append('ELYTRA')
-missing = '__MISSING_STRING_RSCCHECKER'
-radiation_levels = {'HIGH', 'LOW', 'MODERATE', 'VERY_HIGH', 'VERY_DEADLY', missing}
+null = '__MISSING_STRING_RSCCHECKER'
+radiation_levels = {'HIGH', 'LOW', 'MODERATE', 'VERY_HIGH', 'VERY_DEADLY', null}
 
 saveditems = set()
 parentsGroups = set()
@@ -120,7 +120,7 @@ def RewriteSlimefunItems():
     global config
     if config['SlimefunItemsPath'] == 'default':
         current_directory = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(current_directory, "..\\..\\Slimefun\\Items.yml")
+        file_path = os.path.join(current_directory, "..\\Slimefun\\Items.yml")
     else:
         file_path = config['SlimefunItemsPath']
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -129,9 +129,9 @@ def RewriteSlimefunItems():
         yaml.dump({'items': list(regNames)}, file, allow_unicode=True, encoding='utf-8')
 
 
-def getSaveditems():
+def getSaveditems(addon):
     items = set()
-    for root, dirs, files in os.walk("saveditems"):
+    for root, dirs, files in os.walk(f"addons/{addon}/saveditems"):
         for file_name in files:
             if file_name.endswith(".yml"):
                 file_name = os.path.basename(file_name)
@@ -205,7 +205,7 @@ def isSound(item, position):
 
 
 def isScript(item, position):
-    if item == missing:
+    if item == null:
         return
     if not inScripts(str(item)):
         report(position)
@@ -257,7 +257,7 @@ def isInt(num, position, bottom=0, top=MAXINT, Warn=False):
 
 
 def getItemMaxStack(item):
-    return MaxStacks[item]
+    return MaxStacks[item.upper()]
 
 
 def isAmountProper(item, dAm, position, zero=False, warn=False):
@@ -271,24 +271,25 @@ def isbool(dat, arg, position):
         error(f'{arg} 只能是 true 或 false')
 
 
-def isItem(data, position):
+def isItem(data, position, Warn=False):
     # necessary
     dtype = data.get('material_type', 'mc')
-    did = data.get('material', missing)
+    did = data.get('material', null)
     if dtype == 'mc':
         isVanilla(did, position+'的 material_type')
     elif dtype == 'slimefun':
         isSlimefun(did, position+'的 material_type')
     elif dtype == 'saveditem':
         isSaveditem(did, position+'的 material_type')
-    elif did == missing and dtype != 'none':
+    elif did == null and dtype != 'none':
         report(position)
         error('缺少参数 material')
     elif dtype not in ('none', 'skull_base64', 'skull_url', 'skull_hash'):
         report(position+'的 material_type')
         error('type 只能是 mc、 slimefun、 saveditem、 none、 skull_base64、 skull_url 或 skull_hash！')
-    dam = data.get('amount', 1)
-    isAmountProper(did, dam, position+'的 amount')
+    if dtype != 'none':
+        dam = data.get('amount', 1)
+        isAmountProper(did, dam, position+'的 amount', warn=Warn)
 
     # not necessary
     dmodelid = data.get('modelId', 0)
@@ -296,27 +297,27 @@ def isItem(data, position):
 
 
 def isRecipe(data, position):
-    recipe_type = data.get('recipe_type', missing)
+    recipe_type = data.get('recipe_type', null)
     recipe = default_recipe
     load_recipe = data.get('recipe', {})
     for bvar in load_recipe:
         if bvar in r:
             isItem(load_recipe[bvar], f'{position} 的 {bvar} ')
-            item = load_recipe.get('material', missing)
+            item = load_recipe.get('material', null)
             recipe[bvar-1] = {
                 'material': item,
-                'material_type': load_recipe.get('material_type', 'mc' if item != missing else 'none'),
+                'material_type': load_recipe.get('material_type', 'mc' if item != null else 'none'),
                 'amount': load_recipe.get('amount', 1)
             }
         else:
             report(position, True)
             warn(f"{bvar}是无效的编号，有效编号是1-9的数字，此编号会被无视")
-    if recipe_type == missing:
+    if recipe_type == null:
         if recipe != default_recipe:
             report(position)
             error('缺少 recipe_type')
         else:
-            recipe_type = 'NULL'
+            recipe_type = 'null'
     else:
         isRecipeType(recipe_type, position)
     idx = 1
@@ -328,13 +329,13 @@ def isRecipe(data, position):
             idx += 1
     elif recipe_type in {'COMPRESSOR', 'PRESSURE_CHAMBER', 'ORE_CRUSHER', 'GRIND_STONE'}:
         for k in recipe[1:]:
-            if k['material_type'] != 'none' and k['material'] != missing:
+            if k['material_type'] != 'none' and k['material'] != null:
                 report(position+f'的 crafting-recipe 的 第 {idx} 个物品')
                 error(f"第{idx}槽必须为 none 类型")
             idx += 1 
     elif recipe_type == "ANCIENT_ALTAR":
         for k in recipe:
-            if k['material_type'] == 'none' and k['material'] != missing:
+            if k['material_type'] == 'none' and k['material'] != null:
                 report(position+f'的 crafting-recipe 的 第 {idx} 个物品的 type')
                 error(f"第{idx}槽必须不为 none 类型")
             if k['material_type'] != 'none' and k['amount'] != 1:
@@ -393,7 +394,7 @@ def loadReg(data, position):
 def isGroup(group, position):
     if group not in normalGroups:
         report(position)
-        error(f'{group} 不是个有效的分类')
+        error(f'{group} 可能不是个有效的分类，如果是非自定义分类请无视此警告')
 
 
 def isRecipeType(recipe_type, position):
@@ -402,8 +403,8 @@ def isRecipeType(recipe_type, position):
 
 
 def inSlots(name, slots, position, status_slot=-1):
-    ms = machines_slots.get(name, missing)
-    if ms == missing:
+    ms = machines_slots.get(name, null)
+    if ms == null:
         return
     for slot in slots:
         isInt(slot, position, 0, 53)
@@ -424,7 +425,7 @@ def slot_read(slots, position):
                 warn('slot重复！')
             else:
                 fs.add(j)
-        else:
+        elif isinstance(j, str):
             rang = j.split('-')
             if len(rang) == 2:
                 for n in range(int(rang[0]), int(rang[1])):
@@ -435,7 +436,10 @@ def slot_read(slots, position):
                         fs.add(n)
             else:
                 report(position)
-                error('{rang} 可能不是有效的 slot ')
+                error(f'{rang} 可能不是有效的 slot ')
+        else:
+            report(position)
+            error(f'{j} 只能是整数或字符串！')
     return fs
 
 
@@ -445,25 +449,21 @@ def checkPotionEffects(data):
     for string in potion_effects:
         position = f"{position}的 potion_effects 的 '{string}'"
         split = string.split(' ')
-        if len(split) != 3:
+        if len(split) != 2:
             report(position)
-            error('参数格式错误！')
+            error('参数格式错误！应为 - "SPEED 5" ')
             continue
         effect = split[0]
-        dur = int(split[1])
-        amp = int(split[2])
+        amp = int(split[1])
         if effect not in effects:
             report(position)
             error(f'{effect} 不是有效的状态效果')
-        if dur < 1:
-            report(position)
-            warn('持续时间 < 1秒， 在 RSC 1.3.3 中将会被转为 10秒')
         if amp < 0:
             report(position)
             error(f'药水效果等级必须是非负整数，但读取到了{amp}')
 
 
-def checkGroups():
+def checkGroups(addon):
     global i, position
     
     def check(data):
@@ -476,8 +476,8 @@ def checkGroups():
             parentsGroups.add(i)
         elif dtype == 'sub':
             normalGroups.add(i)
-            parent = data.get('parent', missing)
-            if parent == missing:
+            parent = data.get('parent', null)
+            if parent == null:
                 report(position)
                 error('缺少参数 parent')
             elif parent not in parentsGroups:
@@ -494,23 +494,23 @@ def checkGroups():
         else:
             report(position)
             error('type 必须是 nested、 parent、 sub、 seasonal、 locked 或 normal')
-        dtier = data.get('tier', 0)
+        dtier = data.get('tier', 1)
         isInt(dtier, position+'的 tier')
         dhidden = data.get('hidden', False)
         isbool(dhidden, 'hidden', position+'的 hidden')
 
     lateinits = set()
-    for scan_file in files['Groups']:
-        printc(f'Loading groups: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
+    scan_file = "addons/"+addon+"/groups.yml"
+    printc(f'Loading groups: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
 
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
     yield
     for i in lateinits:
         data = k[i]
@@ -518,7 +518,7 @@ def checkGroups():
     yield
 
 
-def checkRecipeTypes():
+def checkRecipeTypes(addon):
     global i, position
     
     def check(data):
@@ -529,17 +529,17 @@ def checkRecipeTypes():
         recipe_types.add(i)
 
     lateinits = set()
-    for scan_file in files['RecipeTypes']:
-        printc(f'Loading recipe_types: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
+    scan_file = "addons/"+addon+"/recipe_types.yml"
+    printc(f'Loading recipe_types: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
 
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
     yield
     for i in lateinits:
         data = k[i]
@@ -547,7 +547,7 @@ def checkRecipeTypes():
     yield
 
 
-def checkGeoResources():
+def checkGeoResources(addon):
     global i, position
 
     def check(data):
@@ -587,17 +587,17 @@ def checkGeoResources():
         items.add(i)
 
     lateinits = set()
-    for scan_file in files['GeoResources']:
-        printc(f'Loading geo_resources: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
+    scan_file = "addons/"+addon+"/geo_resources.yml"
+    printc(f'Loading geo_resources: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
 
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
     yield
     for i in lateinits:
         data = k[i]
@@ -605,7 +605,7 @@ def checkGeoResources():
     yield
 
 
-def checkMobDrops():
+def checkMobDrops(addon):
     global i, position
     
     def check(data):
@@ -626,17 +626,17 @@ def checkMobDrops():
         items.add(i)
 
     lateinits = set()
-    for scan_file in files['MobDrops']:
-        printc(f'Loading mob_drops: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
+    scan_file = "addons/"+addon+"/mob_drops.yml"
+    printc(f'Loading mob_drops: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
 
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
 
     yield
     for i in lateinits:
@@ -645,7 +645,7 @@ def checkMobDrops():
     yield
 
 
-def checkItems():
+def checkItems(addon):
     global i, position
     
     def check(data):
@@ -662,15 +662,15 @@ def checkItems():
         # not necessary
         dplaceable = data.get('placeable', False)
         isbool(dplaceable, 'placeable', position)
-        dscript = data.get('script', missing)
+        dscript = data.get('script', null)
         isScript(dscript, position+'的 script')
         dglow = data.get('glow', False)
         isbool(dglow, 'glow', position)
         drainbow = data.get('rainbow', 'WOOL')
         isRainbowType(drainbow, position+'的 rainbow 的 {ritem}')
         if drainbow == 'CUSTOM':
-            rainbow_materials = data.get('rainbow_materials', missing)
-            if rainbow_materials == missing:
+            rainbow_materials = data.get('rainbow_materials', null)
+            if rainbow_materials == null:
                 report(position)
                 error('缺少 rainbow_materials')
             for ritem in rainbow_materials:
@@ -683,7 +683,7 @@ def checkItems():
         isbool(dvanilla, 'vanilla', position)
         energy_capacity = data.get('energy_capacity', 0)
         isInt(energy_capacity, position+'的 energy_capacity')
-        radiation = data.get('radiation', missing)
+        radiation = data.get('radiation', null)
         if radiation not in radiation_levels:
             report(position+'的 radiation')
             error(f'{radiation} 不是正确的辐射等级')
@@ -694,17 +694,17 @@ def checkItems():
         items.add(i)
     
     lateinits = set()
-    for scan_file in files['Items']:
-        printc(f'Loading items: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
+    scan_file = "addons/"+addon+"/items.yml"
+    printc(f'Loading items: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
 
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
     yield
     for i in lateinits:
         data = k[i]
@@ -712,7 +712,7 @@ def checkItems():
     yield
 
 
-def checkArmors():
+def checkArmors(addon):
     global i, position
 
     def check(data):
@@ -729,46 +729,46 @@ def checkArmors():
                 report(position+'的 protection_types')
                 error(f'{dpt} 不是有效的盔甲保护类型')
         
-        helmet = data.get('helmet', missing)
-        chestplate = data.get('chestplate', missing)
-        leggings = data.get('leggings', missing)
-        boots = data.get('boots', missing)
-        if missing == helmet == chestplate == leggings == boots:
+        helmet = data.get('helmet', null)
+        chestplate = data.get('chestplate', null)
+        leggings = data.get('leggings', null)
+        boots = data.get('boots', null)
+        if null == helmet == chestplate == leggings == boots:
             report(position)
             error('没有设置任何装备！')
-        if helmet != missing:
+        if helmet != null:
             isRecipe(helmet, position)
             isHelmet(helmet['material'], position+'的 material')
             checkPotionEffects(helmet)
             items.add(helmet['id'])
-        if chestplate != missing:
+        if chestplate != null:
             isRecipe(chestplate, position)
             isChestplate(chestplate['material'], position+'的 material')
             checkPotionEffects(chestplate)
             items.add(chestplate['id'])
-        if leggings != missing:
+        if leggings != null:
             isRecipe(leggings, position)
             isLeggings(leggings['material'], position+'的 material')
             checkPotionEffects(leggings)
             items.add(leggings['id'])
-        if boots != missing:
+        if boots != null:
             isRecipe(boots, position)
             isBoots(boots['material'], position+'的 material')
             checkPotionEffects(boots)
             items.add(boots['id'])
 
     lateinits = set()
-    for scan_file in files['Armors']:
-        printc(f'Loading armors: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
+    scan_file = "addons/"+addon+"/armors.yml"
+    printc(f'Loading armors: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
 
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
     yield
     for i in lateinits:
         data = k[i]
@@ -776,7 +776,7 @@ def checkArmors():
     yield
 
 
-def checkCapacitors():
+def checkCapacitors(addon):
     global i, position
     
     def check(data):
@@ -793,17 +793,17 @@ def checkCapacitors():
         items.add(i)
         
     lateinits = set()
-    for scan_file in files['Capacitors']:
-        printc(f'Loading capacitors: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
+    scan_file = "addons/"+addon+"/capacitors.yml"
+    printc(f'Loading capacitors: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
 
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
     yield
     for i in lateinits:
         data = k[i]
@@ -811,17 +811,17 @@ def checkCapacitors():
     yield
 
 
-def checkMenus():
+def checkMenus(addon):
     global i, position
     
     def check(data):
         global i, position
         position = f'menus: {scan_file} 的 {i} '
         loadReg(data, position)
-        dimport = data.get('import', missing)
-        if dimport == missing:
-            dtitle = data.get('title', missing)
-            if dtitle == missing:
+        dimport = data.get('import', null)
+        if dimport == null:
+            dtitle = data.get('title', null)
+            if dtitle == null:
                 report(position+'的 title')
                 error("缺少 title！")
             slots = data['slots']
@@ -834,20 +834,20 @@ def checkMenus():
         else:
             if dimport not in machines_slots:
                 report(position+'的 import')
-                error(f'{dimport} 不是有效的机器菜单')
+                error(f'{dimport} 可能不是有效的机器菜单')
 
     lateinits = set()
-    for scan_file in files['Menus']:
-        printc(f'Loading menus: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
+    scan_file = "addons/"+addon+"/menus.yml"
+    printc(f'Loading menus: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
 
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
     yield
     for i in lateinits:
         data = k[i]
@@ -855,7 +855,7 @@ def checkMenus():
     yield
 
 
-def checkMachines():
+def checkMachines(addon):
     global i, position
     
     def check(data):
@@ -874,11 +874,11 @@ def checkMachines():
         inSlots(i, ioput, position+'的 input 或 output', work)
 
         # not necessary
-        dscript = data.get('script', missing)
+        dscript = data.get('script', null)
         isScript(dscript, position+'的 script')
-        energy = data.get('energy', missing)
+        energy = data.get('energy', null)
         position += '的 energy '
-        if energy != missing:
+        if energy != null:
             dcapacity = energy.get('capacity', 0)
             isInt(dcapacity, position+'的 capacity')
             dtotalticks = energy['totalTicks']
@@ -890,17 +890,17 @@ def checkMachines():
         items.add(i)
 
     lateinits = set()
-    for scan_file in files['Machines']:
-        printc(f'Loading machines: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
+    scan_file = "addons/"+addon+"/machines.yml"
+    printc(f'Loading machines: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
 
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
     yield
     for i in lateinits:
         data = k[i]
@@ -908,9 +908,9 @@ def checkMachines():
     yield
 
 
-def checkGenerators():
+def checkGenerators(addon):
     global i, position
-    
+
     def check(data):
         global i, position
         # necessary
@@ -929,27 +929,28 @@ def checkGenerators():
         isInt(dproduction, position+'的 production', 1)
         fuels = data['fuels']
         position += '的 fuels '
-        for recipe in fuels.values():
+        for ddk in fuels:
+            recipe = fuels[ddk]
             item = recipe['item']
-            isItem(item, position+f'的 {recipe} 的 item')
+            isItem(item, position+f'的 {ddk} 的 item')
             seconds = recipe['seconds']
-            isInt(seconds, position+f'的 {recipe} 的 seconds')
+            isInt(seconds, position+f'的 {ddk} 的 seconds')
             output = recipe['output']
-            isItem(output, position+f'的 {recipe} 的 output')
+            isItem(output, position+f'的 {ddk} 的 output ')
         items.add(i)
 
     lateinits = set()
-    for scan_file in files['Generators']:
-        printc(f'Loading generators: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
+    scan_file = "addons/"+addon+"/generators.yml"
+    printc(f'Loading generators: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
 
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
     yield
     for i in lateinits:
         data = k[i]
@@ -957,7 +958,7 @@ def checkGenerators():
     yield
 
 
-def checkSolarGenerators():
+def checkSolarGenerators(addon):
     global i, position
     
     def check(data):
@@ -981,17 +982,17 @@ def checkSolarGenerators():
         items.add(i)
 
     lateinits = set()
-    for scan_file in files['SolarGenerators']:
-        printc(f'Loading solar_generators: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
+    scan_file = "addons/"+addon+"/solar_generators.yml"
+    printc(f'Loading solar_generators: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
 
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
     yield
     for i in lateinits:
         data = k[i]
@@ -999,7 +1000,7 @@ def checkSolarGenerators():
     yield
 
 
-def checkMaterialGenerators():
+def checkMaterialGenerators(addon):
     global i, position
     
     def check(data):
@@ -1015,7 +1016,7 @@ def checkMaterialGenerators():
         dcapacity = data['capacity']
         isInt(dcapacity, position+'的 capacity', 1)
         outputItem = data['outputItem']
-        isItem(outputItem, position+'的 outputItem')
+        isItem(outputItem, position+'的 outputItem ', Warn=True)
         tickrate = data['tickRate']
         isInt(tickrate, position+'的 tickRate', 1)
         status_slot = data['status']
@@ -1027,17 +1028,17 @@ def checkMaterialGenerators():
         items.add(i)
     
     lateinits = set()
-    for scan_file in files['MaterialGenerators']:
-        printc(f'Loading mat_generators: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
+    scan_file = "addons/"+addon+"/mat_generators.yml"
+    printc(f'Loading mat_generators: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
 
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
     yield
     for i in lateinits:
         data = k[i]
@@ -1045,7 +1046,7 @@ def checkMaterialGenerators():
     yield
 
 
-def checkRecipeMachines():
+def checkRecipeMachines(addon):
     global i, position
 
     def check(data):
@@ -1063,20 +1064,21 @@ def checkRecipeMachines():
         ioput = dinput + doutput
         inSlots(i, ioput, position+'的 input 或 output')
         dcapacity = data['capacity']
-        isInt(dcapacity, position+'的 capacity', 1)
+        isInt(dcapacity, position+'的 capacity', 0)
         depc = data['energyPerCraft']
         isInt(depc, position+'的 energyPerCraft', 1)
         if dcapacity < depc:
             report(position)
             error('合成一次的消耗能量不能大于能量容量！')
-        speed = data['speed']
+        speed = data.get('speed', 1)
         isInt(speed, position+'的 speed', 1)
         leninput = len(dinput)
         lenoutput = len(doutput)
         recipes = data['recipes']
         position += '的 recipes '
+        BP = position
         for key, recipe in recipes.items():
-            position = position + f'的 {key} '
+            position = BP + f'的 {key} '
             seconds = recipe['seconds']
             isInt(seconds, position+'的 seconds', 1)
             chooseOne = recipe.get('chooseOne', False)
@@ -1089,8 +1091,8 @@ def checkRecipeMachines():
                 error('配方所需物品数量超过了输入槽位数')
             for o in recipe_input:
                 ri = recipe_input[o]
-                isItem(ri, position+f'的 input 的 {o}')
                 itype = ri.get('material_type', 'mc')
+                isItem(ri, position+f'的 input 的 {o}')
                 key = (ri['material'], itype)
                 if key in temp:
                     temp[key] += 1
@@ -1100,7 +1102,8 @@ def checkRecipeMachines():
             for p in temp.values():
                 if p > 1:
                     report(position+'的 input')
-                    error('你不能设置输入超过两个相同物品！')
+                    error('你不能设置输入两个或以上相同物品！')
+                    error('According to Slimefun Github Issue #4166. ')
             for p in types:
                 if types[0] == 'none':
                     report(position+'的 input')
@@ -1112,18 +1115,14 @@ def checkRecipeMachines():
                 error('配方输出物品数量超过了输出槽位数')
             for o in recipe_output:
                 ro = recipe_output[o]
-                isItem(ro, position+f'的 output 的 {o}')
                 itype = ro.get('material_type', 'mc')
+                isItem(ro, position+f'的 output 的 {o}')
                 key = (ro['material'], itype)
                 if key in temp:
                     temp[key] += 1
                 else:
                     temp[key] = 1
                 types.append(itype)
-            for p in temp.values():
-                if p > 1:
-                    report(position+'的 output')
-                    error('你不能设置输入超过两个相同物品！')
             for p in types:
                 if types[0] == 'none':
                     report(position+'的 output')
@@ -1131,17 +1130,17 @@ def checkRecipeMachines():
         items.add(i)
 
     lateinits = set()
-    for scan_file in files['RecipeMachines']:
-        printc(f'Loading recipe_machines: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
-        
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    scan_file = "addons/"+addon+"/recipe_machines.yml"
+    printc(f'Loading recipe_machines: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
+
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
     yield
     for i in lateinits:
         data = k[i]
@@ -1149,7 +1148,7 @@ def checkRecipeMachines():
     yield
 
 
-def checkSimpleMachines():
+def checkSimpleMachines(addon):
     global i, position
     
     def check(data):
@@ -1178,17 +1177,17 @@ def checkSimpleMachines():
         items.add(i)
 
     lateinits = set()
-    for scan_file in files['SimpleMachines']:
-        printc(f'Loading simple_machines: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
+    scan_file = "addons/"+addon+"/simple_machines.yml"
+    printc(f'Loading simple_machines: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
 
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
     yield
     for i in lateinits:
         data = k[i]
@@ -1196,7 +1195,7 @@ def checkSimpleMachines():
     yield
 
 
-def checkMultiblockMachines():
+def checkMultiblockMachines(addon):
     global i, position
     
     def check(data):
@@ -1240,17 +1239,17 @@ def checkMultiblockMachines():
         items.add(i)
 
     lateinits = set()
-    for scan_file in files['MultiblockMachines']:
-        printc(f'Loading mb_machines: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
+    scan_file = "addons/"+addon+"/mb_machines.yml"
+    printc(f'Loading mb_machines: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
 
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
     yield
     for i in lateinits:
         data = k[i]
@@ -1258,7 +1257,7 @@ def checkMultiblockMachines():
     yield
 
 
-def checkResearches():
+def checkResearches(addon):
     global i, position
 
     def check(data):
@@ -1268,33 +1267,46 @@ def checkResearches():
         loadReg(data, position)
         did = data['id']
         isInt(did, position+'的 id')
+        name = data.get('name', null)
+        if name == null:
+            report(position+'的 name')
+            error('不能缺少名字！')
+        else:
+            for s in name:
+                if s in 'abcdefghijklmnopqrstuvwxyz0123456789.-_':
+                    report(position)
+                    error('研究ID只能由 abcdefghijklmnopqrstuvwxyz0123456789.-_ 中的字符组成')
+                    break
+
         for item in data['items']:
             isSlimefun(item, position+'的 items')
 
-        # cannot have both
-        dlc = data.get('levelCost', missing)
-        dcc = data.get('currencyCost', missing)
-        if dlc == missing:
-            if dcc == missing:
-                report(position)
-                error('缺少 levelCost 或 currencyCost')
-            else:
-                isInt(dcc, position)
-        else:
-            isInt(dcc, position)
+        # special
+        dlc = data.get('levelCost', null)
+        dcc = data.get('currencyCost', null)
+        flag = True
+        if dlc != null:
+            isInt(dlc, position+'的 levelCost', 1)
+            flag = False
+        if dcc != null:
+            isInt(dcc, position+'的 currencyCost', 1)
+            flag = False
+        if flag:
+            report(position)
+            error("缺少 levelCost 或 currencyCost")
 
     lateinits = set()
-    for scan_file in files['Researches']:
-        printc(f'Loading researches: {scan_file}')
-        with open(scan_file, 'r', encoding='utf-8') as f:
-            k = getYamlContext(f)
+    scan_file = "addons/"+addon+"/researches.yml"
+    printc(f'Loading researches: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
 
-        for i in k:
-            data = k[i]
-            if isLateInit(data):
-                lateinits.add(i)
-                continue
-            check(data)
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
     yield
     for i in lateinits:
         data = k[i]
@@ -1303,28 +1315,30 @@ def checkResearches():
 
 
 def checkAll():
-    global i, position
+    global i, position, saveditems
     chs = []
-    for checker in checkers:
-        chs.append(checker())
-    try:
-        for __ in range(2):
-            if __ == 1:
-                print(f'{color.gold} loading lateInit items:')
-            for ch in chs:
-                start = time()
-                next(ch)
-                print(f'{color.green}Spent {time() - start}s')
-    except (yaml.scanner.ScannerError, yaml.parser.ParserError):
-        error('在获取YAML内容时遇到了错误！')
-        error('可能是YAML结构错误！请在下方网站内检查')
-        error('https://www.bejson.com/validators/yaml_editor/')
-    except KeyError:
-        report(position)
-        error('未找到参数！')
-        error('可能是YAML缺少了参数或参数不完整！')
-        error(f'相关信息 {i} {position}')
-    
+    for addon in addons:
+        saveditems = getSaveditems(addon)
+        for checker in checkers:
+            chs.append(checker(addon))
+        try:
+            for __ in range(2):
+                if __ == 1:
+                    print(f'{color.gold} loading lateInit items:')
+                for ch in chs:
+                    start = time()
+                    next(ch)
+                    print(f'{color.green}Spent {time() - start}s')
+        except (yaml.scanner.ScannerError, yaml.parser.ParserError):
+            error('在获取YAML内容时遇到了错误！')
+            error('可能是YAML结构错误！请在下方网站内检查')
+            error('https://www.bejson.com/validators/yaml_editor/')
+        except KeyError:
+            report(position)
+            error('未找到参数！')
+            error('可能是YAML缺少了参数或参数不完整！')
+            error(f'相关信息 {i} {position}')
+
     print(f"{color.cyan}Done! {time() - sum_start}s")
 
 
@@ -1341,25 +1355,8 @@ try:
     ignores = config['ignores']
     scan_files = config['scan-files']
     addons = scan_files['addons']
-    files = {
-        'Groups': [addon+'/groups.yml' for addon in addons],
-        'RecipeTypes': [addon+'/recipe_types.yml' for addon in addons],
-        'GeoResources': [addon+'/geo_resources.yml' for addon in addons],
-        'MobDrops': [addon+'/mob_drops.yml' for addon in addons],
-        'Items': [addon+'/items.yml' for addon in addons],
-        'Armors': [addon+'/armors.yml' for addon in addons],
-        'Capacitors': [addon+'/capacitors.yml' for addon in addons],
-        'Menus': [addon+'/menus.yml' for addon in addons],
-        'Machines': [addon+'/machines.yml' for addon in addons],
-        'Generators': [addon+'/generators.yml' for addon in addons],
-        'SolarGenerators': [addon+'/solar_generators.yml' for addon in addons],
-        'MaterialGenerators': [addon+'/'+'mat_generators.yml' for addon in addons],
-        'RecipeMachines': [addon+'/recipe_machines.yml' for addon in addons],
-        'SimpleMachines': [addon+'/simple_machines.yml' for addon in addons],
-        'MultiblockMachines': [addon+'/mb_machines.yml' for addon in addons],
-        'Researches': [addon+'/researches.yml' for addon in addons]
-    }
     checkers = [
+        # int just a placeholder
         int if ignores['ignoreGroups'] else checkGroups,
         int if ignores['ignoreRecipeTypes'] else checkRecipeTypes,
         int if ignores['ignoreGeoResources'] else checkGeoResources,
@@ -1368,10 +1365,10 @@ try:
         int if ignores['ignoreArmors'] else checkArmors,
         int if ignores['ignoreCapacitors'] else checkCapacitors,
         int if ignores['ignoreMenus'] else checkMenus,
-        int if ignores['ignoreMachines'] else checkMachines,
         int if ignores['ignoreGenerators'] else checkGenerators,
         int if ignores['ignoreSolarGenerators'] else checkSolarGenerators,
         int if ignores['ignoreMaterialGenerators'] else checkMaterialGenerators,
+        int if ignores['ignoreMachines'] else checkMachines,
         int if ignores['ignoreRecipeMachines'] else checkRecipeMachines,
         int if ignores['ignoreSimpleMachines'] else checkSimpleMachines,
         int if ignores['ignoreMultiblockMachines'] else checkMultiblockMachines,
@@ -1388,7 +1385,6 @@ try:
         keys.append(tuple(item.keys())[0])
         values.append(tuple(item.values())[0])
     MaxStacks = dict(zip(keys, values))
-    saveditems = getSaveditems()
     entities = set()
     for item in VanillaItems:
         if item[-10:] == '_SPAWN_EGG':
@@ -1406,8 +1402,7 @@ except BaseException:  # 任何错误
     error('运行程序时遇到了致命错误，请查看错误信息，确定并非自己的问题后，可联系作者修复！')
     error(f'在检查 {i} 时遇到了错误，可能是缺少必需参数！')
     error(f'相关信息 {position}')
-finally:
-    1  # nothing to do
+finally:...
 """
 '请确保控制台输出的bug（若有）皆已修复，本程序才能正常运行！'
 '需要注意的是，此脚本并不会检查任何与name或lore相关的内容！'

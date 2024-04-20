@@ -495,7 +495,7 @@ def checkGroups(addon):
             report(position)
             error('type 必须是 nested、 parent、 sub、 seasonal、 locked 或 normal')
         dtier = data.get('tier', 1)
-        isInt(dtier, position+'的 tier')
+        isInt(dtier, position+'的 tier', 1)
         dhidden = data.get('hidden', False)
         isbool(dhidden, 'hidden', position+'的 hidden')
 

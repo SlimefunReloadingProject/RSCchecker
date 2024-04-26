@@ -123,6 +123,7 @@ def RewriteSlimefunItems():
         file_path = os.path.join(current_directory, "..\\Slimefun\\Items.yml")
     else:
         file_path = config['SlimefunItemsPath']
+    with open(file_path, 'w', encoding='utf-8'): 1
     with open(file_path, 'r', encoding='utf-8') as file:
         regNames = getYamlContext(file).keys()
     with open('__SlimefunItems.yml', 'w', encoding='utf-8') as file:

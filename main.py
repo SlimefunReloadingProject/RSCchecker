@@ -11,7 +11,7 @@ recipe_types = set("ENHANCED_CRAFTING_TABLE, MAGIC_WORKBENCH, ARMOR_FORGE, COMPR
 BIOMES = set("BADLANDS  BAMBOO_JUNGLE  BASALT_DELTAS  BEACH  BIRCH_FOREST  CHERRY_GROVE  COLD_OCEAN  CRIMSON_FOREST  CUSTOM DARK_FOREST  DEEP_COLD_OCEAN  DEEP_DARK  DEEP_FROZEN_OCEAN  DEEP_LUKEWARM_OCEAN  DEEP_OCEAN  DESERT  DRIPSTONE_CAVES  END_BARRENS  END_HIGHLANDS  END_MIDLANDS  ERODED_BADLANDS  FLOWER_FOREST  FOREST  FROZEN_OCEAN  FROZEN_PEAKS  FROZEN_RIVER  GROVE  ICE_SPIKES  JAGGED_PEAKS  JUNGLE  LUKEWARM_OCEAN  LUSH_CAVES  MANGROVE_SWAMP  MEADOW  MUSHROOM_FIELDS  NETHER_WASTES  OCEAN  OLD_GROWTH_BIRCH_FOREST  OLD_GROWTH_PINE_TAIGA  OLD_GROWTH_SPRUCE_TAIGA  PLAINS  RIVER  SAVANNA  SAVANNA_PLATEAU  SMALL_END_ISLANDS  SNOWY_BEACH  SNOWY_PLAINS  SNOWY_SLOPES  SNOWY_TAIGA  SOUL_SAND_VALLEY  SPARSE_JUNGLE  STONY_PEAKS  STONY_SHORE  SUNFLOWER_PLAINS  SWAMP  TAIGA  THE_END  THE_VOID  WARM_OCEAN  WARPED_FOREST  WINDSWEPT_FOREST  WINDSWEPT_GRAVELLY_HILLS  WINDSWEPT_HILLS  WINDSWEPT_SAVANNA  WOODED_BADLANDS  OTHERS".split('  '))
 sounds = set('ANCIENT_ALTAR_FINISH_SOUND ANCIENT_ALTAR_ITEM_CHECK_SOUND ANCIENT_ALTAR_ITEM_DROP_SOUND ANCIENT_ALTAR_ITEM_PICK_UP_SOUND ANCIENT_ALTAR_START_SOUND ANCIENT_PEDESTAL_ITEM_PLACE_SOUND ARMOR_FORGE_FINISH_SOUND ARMOR_FORGE_WORKING_SOUND AUTO_CRAFTER_GUI_CLICK_SOUND AUTO_CRAFTER_UPDATE_RECIPE AUTOMATED_PANNING_MACHINE_FAIL_SOUND AUTOMATED_PANNING_MACHINE_SUCCESS_SOUND BACKPACK_CLOSE_SOUND BACKPACK_OPEN_SOUND BEE_BOOTS_FALL_SOUND COMPOSTER_COMPOST_SOUND COMPRESSOR_CRAFT_CONTRACT_SOUND COMPRESSOR_CRAFT_EXTEND_SOUND COMPRESSOR_CRAFT_SOUND COOLER_CONSUME_SOUND CRUCIBLE_ADD_LAVA_SOUND CRUCIBLE_ADD_WATER_SOUND CRUCIBLE_BLOCK_BREAK_SOUND CRUCIBLE_GENERATE_LIQUID_SOUND CRUCIBLE_INTERACT_SOUND CRUCIBLE_PLACE_LAVA_SOUND CRUCIBLE_PLACE_WATER_SOUND DEBUG_FISH_CLICK_SOUND DIET_COOKIE_CONSUME_SOUND ELYTRA_CAP_IMPACT_SOUND ENCHANTMENT_RUNE_ADD_ENCHANT_SOUND ENDER_BACKPACK_OPEN_SOUND ENHANCED_CRAFTING_TABLE_CRAFT_SOUND EXPLOSIVE_BOW_HIT_SOUND EXPLOSIVE_TOOL_EXPLODE_SOUND FISHERMAN_ANDROID_FISHING_SOUND FLASK_OF_KNOWLEDGE_FILLUP_SOUND GPS_NETWORK_ADD_WAYPOINT GPS_NETWORK_CREATE_WAYPOINT GPS_NETWORK_OPEN_PANEL_SOUND GRIND_STONE_INTERACT_SOUND GUIDE_BUTTON_CLICK_SOUND GUIDE_CONTRIBUTORS_OPEN_SOUND GUIDE_LANGUAGE_OPEN_SOUND GUIDE_OPEN_SETTING_SOUND IGNITION_CHAMBER_USE_FLINT_AND_STEEL_SOUND INFUSED_HOPPER_TELEPORT_SOUND INFUSED_MAGNET_TELEPORT_SOUND IRON_GOLEM_ASSEMBLER_ASSEMBLE_SOUND JETBOOTS_THRUST_SOUND JETPACK_THRUST_SOUND JUICER_USE_SOUND LIMITED_USE_ITEM_BREAK_SOUND MAGIC_SUGAR_CONSUME_SOUND MAGIC_WORKBENCH_FINISH_SOUND MAGIC_WORKBENCH_START_ANIMATION_SOUND MAGICAL_EYE_OF_ENDER_USE_SOUND MINER_ANDROID_BLOCK_GENERATION_SOUND MINING_TASK_SOUND ORE_WASHER_WASH_SOUND PLAYER_RESEARCHING_SOUND PORTABLE_CRAFTER_OPEN_SOUND PORTABLE_DUSTBIN_OPEN_SOUND PRESSURE_CHAMBER_FINISH_SOUND PRESSURE_CHAMBER_WORKING_SOUND PROGRAMMABLE_ANDROID_SCRIPT_DOWNLOAD_SOUND SLIME_BOOTS_FALL_SOUND SMELTERY_CRAFT_SOUND SOULBOUND_RUNE_RITUAL_SOUND SPLINT_CONSUME_SOUND STOMPER_BOOTS_STOMP_SOUND TAPE_MEASURE_MEASURE_SOUND TELEPORT_SOUND TELEPORT_UPDATE_SOUND TELEPORTATION_MANAGER_OPEN_GUI TOME_OF_KNOWLEDGE_USE_SOUND VAMPIRE_BLADE_HEALING_SOUND VANILLA_AUTO_CRAFTER_UPDATE_RECIPE_SOUND VILLAGER_RUNE_TRANSFORM_SOUND VITAMINS_CONSUME_SOUND WIND_STAFF_USE_SOUND'.split(' '))
 RainbowTypes = set('GLASS_PANE, GLASS, STAINED_GLASS, STAINED_GLASS_PANE, WOOL, TERRACOTTA, CUSTOM, GLAZED_TERRACOTTA, TERRACOTTA_ALL'.split(', '))
-simpleMachinesTypes = set(('ELECTRIC_SMELTERY ELECTRIC_FURNACE ELECTRIC_GOLD_PAN ELECTRIC_DUST_WASHER ELECTRIC_ORE_GRINDER ELECTRIC_INGOT_FACTORY ELECTRIC_INGOT_PULVERIZER CHARGING_BENCH TREE_GROWTH_ACCELERATOR ANIMAL_GROWTH_ACCELERATOR CROP_GROWTH_ACCELERATOR FREEZER CARBON_PRESS ELECTRIC_PRESS ELECTRIC_CRUCIBLE FODD_FABRICATOR HEATED_PRESSURE_CHAMBER AUTO_ENCHANTER AUTO_DISENCHANTER BOOK_BINDER AUTO_ANVIL AUTO_DRIER AUTO_BREWER REFINERY PRODUCT_COLLECTOR ENTITY_ASSEMBLER').split(' '))
+simpleMachinesTypes = set(('ELECTRIC_SMELTERY ELECTRIC_FURNACE ELECTRIC_GOLD_PAN ELECTRIC_DUST_WASHER ELECTRIC_ORE_GRINDER ELECTRIC_INGOT_FACTORY ELECTRIC_INGOT_PULVERIZER CHARGING_BENCH TREE_GROWTH_ACCELERATOR ANIMAL_GROWTH_ACCELERATOR CROP_GROWTH_ACCELERATOR FREEZER CARBON_PRESS ELECTRIC_PRESS ELECTRIC_CRUCIBLE FODD_FABRICATOR HEATED_PRESSURE_CHAMBER AUTO_ENCHANTER AUTO_DISENCHANTER BOOK_BINDER AUTO_ANVIL AUTO_DRIER AUTO_BREWER REFINERY PRODUCT_COLLECTOR').split(' '))
 protection_types = set(('BEES', 'RADIATION', 'FLYING_INTO_WALL'))
 armor_levels = ['LEATHER', 'CHAINMAIL', 'IRON', 'DIAMOND', 'GOLDEN', 'NETHERITE']
 effects = {'SPEED', 'SLOWNESS', 'HASTE', 'MINING_FATIGUE', 'STRENGTH', 'INSTANT_HEALTH', 'INSTANT_DAMAGE', 'JUMP_BOOST', 'NAUSEA', 'REGENERATION', 'RESISTANCE', 'FIRE_RESISTANCE', 'WATER_BREATHING', 'INVISIBILITY', 'BLINDNESS', 'NIGHT_VISION', 'HUNGER', 'WEAKNESS', 'POISON', 'WITHER', 'HEALTH_BOOST', 'ABSORPTION', 'SATURATION', 'GLOWING', 'LEVITATION', 'LUCK', 'UNLUCK', 'SLOW_FALLING', 'CONDUIT_POWER', 'DOLPHINS_GRACE', 'BAD_OMEN', 'HERO_OF_THE_VILLAGE', 'DARKNESS'}
@@ -123,7 +123,8 @@ def RewriteSlimefunItems():
         file_path = os.path.join(current_directory, "..\\Slimefun\\Items.yml")
     else:
         file_path = config['SlimefunItemsPath']
-    with open(file_path, 'w', encoding='utf-8'): 1
+    with open('__SlimefunItems.yml', 'w', encoding='utf-8') as file:
+        file.write('\n')
     with open(file_path, 'r', encoding='utf-8') as file:
         regNames = getYamlContext(file).keys()
     with open('__SlimefunItems.yml', 'w', encoding='utf-8') as file:
@@ -152,11 +153,11 @@ def getVanillaItems():
     return mcItems['items']
 
 
-def getScripts():
+def getScripts(addon):
     items = set()
-    for root, dirs, files in os.walk("scripts"):
+    for root, dirs, files in os.walk(f"addons/{addon}/scripts"):
         for file_name in files:
-            if file_name.endswith(".js") or file_name.endswith(".py"):
+            if file_name.endswith(".js"):
                 file_name = os.path.basename(file_name)
                 items.add(file_name[:-3])
     return items
@@ -379,7 +380,7 @@ def loadReg(data, position):
             if len(temp) != 3:
                 report(position+'的 conditions')
                 error(f'在" {dat} "中参数数量错误！')
-            elif temp[1] in ('>=', '=', '<=', '>', '<', '!='):
+            elif temp[1] in ('>=', '<=', '>', '<'):
                 for i in temp[2].split('.'):
                     isInt(int(i), position)
             else:
@@ -1159,19 +1160,22 @@ def checkSimpleMachines(addon):
         ditem = data['item']
         isItem(ditem, position+'的 item')
         isRecipe(data, position+'的 recipe')
-        settings = data['settings']
-        dcapacity = settings['capacity']
-        isInt(dcapacity, position+'的 settings 的 capacity', 1)
-        dconsumption = settings['consumption']
-        isInt(dconsumption, position+'的 settings 的 consumption', 1)
-        dspeed = settings.get('speed', 1)
-        isInt(dspeed, position+'的 settings 的 speed', 1)
-        dradius = settings.get('radius', 1)
-        isInt(dradius, position+'的 settings 的 radius', 1)
         dtype = data['type']
         if dtype not in simpleMachinesTypes:
             report(position+'的 type')
             error(f'{type} 不是有效的 type')
+        settings = data['settings']
+        position += '的 settings '
+        dcapacity = settings['capacity']
+        isInt(dcapacity, position+'的 capacity', 1)
+        dconsumption = settings['consumption']
+        isInt(dconsumption, position+'的 consumption', 1)
+        dspeed = settings.get('speed', 1)
+        isInt(dspeed, position+'的 speed', 1)
+        dradius = settings.get('radius', 1)
+        isInt(dradius, position+'的 radius', 1)
+        drepair = settings.get('repair_factor', 10)
+        isInt(drepair, position+'的 repair_factor', 1)
         items.add(i)
 
     lateinits = set()
@@ -1302,9 +1306,10 @@ def checkResearches(addon):
 
 
 def checkAll():
-    global i, position, saveditems
+    global i, position, saveditems, scripts
     chs = []
     for addon in addons:
+        scripts = getScripts(addon)
         saveditems = getSaveditems(addon)
         for checker in checkers:
             chs.append(checker(addon))
@@ -1325,8 +1330,6 @@ def checkAll():
             error('未找到参数！')
             error('可能是YAML缺少了参数或参数不完整！')
             error(f'相关信息 {i} {position}')
-
-    print(f"{color.cyan}Done! {time() - sum_start}s")
 
 
 try:
@@ -1365,7 +1368,6 @@ try:
     SlimefunItems = set(getSlimefunItems())
     loadedItems = getVanillaItems()
     VanillaItems = set((tuple(i.keys())[0] for i in loadedItems))
-    scripts = getScripts()
     keys = []
     values = []
     for item in loadedItems:
@@ -1378,10 +1380,6 @@ try:
             entities.add(item[:-10])
     entities.add("GIANT")
     checkAll()
-    print(f'{color.cyan}共{totalBug}个Bug')
-    print(f'{color.cyan}共{totalWarn}个Warn')
-    print(f'{color.cyan}此脚本实际上并不能找到全部的Bug')
-    print(f'{color.cyan}只能尽可能找出潜在的Bug！')
 except FileNotFoundError as err:
     error('无法找到文件！')
     error(err)
@@ -1389,7 +1387,12 @@ except BaseException:  # 任何错误
     error('运行程序时遇到了致命错误，请查看错误信息，确定并非自己的问题后，可联系作者修复！')
     error(f'在检查 {i} 时遇到了错误，可能是缺少必需参数！')
     error(f'相关信息 {position}')
-finally:...
+finally:
+    print(f"{color.cyan}Done! {time() - sum_start}s")
+    print(f'{color.cyan}共{totalBug}个Bug')
+    print(f'{color.cyan}共{totalWarn}个Warn')
+    print(f'{color.cyan}此脚本实际上并不能找到全部的Bug')
+    print(f'{color.cyan}只能尽可能找出潜在的Bug！')
 """
 '请确保控制台输出的bug（若有）皆已修复，本程序才能正常运行！'
 '需要注意的是，此脚本并不会检查任何与name或lore相关的内容！'

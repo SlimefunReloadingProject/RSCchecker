@@ -25,7 +25,7 @@ ignores:
 scan-files:
   # 你应该在这里填路径
   # ex: Groups: ['groups.yml','D:/groups.yml', 'C:/groups.yml', 'groups2.yml'] 
-  #     addons: ['example', 'slimefunExpansion']
+  #     addons: ['slimefunExpansion']
   # 诸如此类 ↑
   addons: ['example']
   Groups: ['groups.yml']

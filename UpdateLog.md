@@ -1,3 +1,6 @@
+# 1.4REALEASE
+
+1. 同步RSC1.4
 
 # 1.4SHOT
 

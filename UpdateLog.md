@@ -1,3 +1,15 @@
+# 1.5SHOT
+
+1. 检测修复
+
+   - 现在是先检查`mob_drops.yml`再检查`geo_resources.yml`了
+   - 增加了`supers.yml`和`foods.yml`的检查
+   - 删除了在最后检查任何错误的catch
+
+2. Bug修复
+
+   - 修复了不能检查多个addon的Bug
+
 # 1.4REALEASE
 
 1. 同步RSC1.4

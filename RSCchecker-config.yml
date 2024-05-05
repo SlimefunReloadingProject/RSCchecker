@@ -11,6 +11,7 @@ ignores:
   ignoreItems: false
   ignoreArmors: false
   ignoreCapacitors: false
+  ignoreFoods: false
   ignoreMenus: false
   ignoreMachines: false
   ignoreGenerators: false
@@ -20,12 +21,13 @@ ignores:
   ignoreSimpleMachines: false
   ignoreMultiblockMachines: false
   ignoreResearches: false
+  ignoreSupers: false
 
 # 扫描哪些文件
 scan-files:
   # 你应该在这里填路径
-  # ex: Groups: ['groups.yml','D:/groups.yml', 'C:/groups.yml', 'groups2.yml'] 
-  #     addons: ['slimefunExpansion']
+  # ex: Groups: ['groups.yml'] 暂不支持绝对路径
+  #     addons: ['example', 'slimefunExpansion'] 暂不支持绝对路径 
   # 诸如此类 ↑
   addons: ['example']
   Groups: ['groups.yml']
@@ -35,6 +37,7 @@ scan-files:
   Items: ['items.yml']
   Armors: ['armors.yml']
   Capacitors: ['capacitors.yml']
+  Foods: ['foods.yml']
   Menus: ['menus.yml']
   Machines: ['machines.yml']
   Generators: ['generators.yml']
@@ -44,6 +47,7 @@ scan-files:
   SimpleMachines: ['simple_machines.yml']
   MultiblockMachines: ['mb_machines.yml']
   Researches: ['researches.yml']
+  Supers: ['supers.yml']
 # 最多打印多少bug
 MaxPrintBug: 1000
 # 最多打印多少Warn

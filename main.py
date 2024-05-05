@@ -1,11 +1,10 @@
 # coding=utf-8
-
 import os
 import yaml
 
 from time import time
 
-_VERSION = '1.4 REALEASE'
+_VERSION = '1.5 SHOT'
 MAXINT = 2147483647
 recipe_types = set("ENHANCED_CRAFTING_TABLE, MAGIC_WORKBENCH, ARMOR_FORGE, COMPRESSOR, PRESSURE_CHAMBER, SMELTERY, ORE_CRUSHER, GRIND_STONE, ANCIENT_ALTAR, NULL, MULTIBLOCK, GEO_MINER, GOLD_PAN, JUICER, MOB_DROP, BARTER_DROP, INTERACT, HEATED_PRESSURE_CHAMBER, FOOD_FABRICATOR, FOOD_COMPOSTER, FREEZER, REFINERY, NUCLEAR_REACTOR".split(', '))
 BIOMES = set("BADLANDS  BAMBOO_JUNGLE  BASALT_DELTAS  BEACH  BIRCH_FOREST  CHERRY_GROVE  COLD_OCEAN  CRIMSON_FOREST  CUSTOM DARK_FOREST  DEEP_COLD_OCEAN  DEEP_DARK  DEEP_FROZEN_OCEAN  DEEP_LUKEWARM_OCEAN  DEEP_OCEAN  DESERT  DRIPSTONE_CAVES  END_BARRENS  END_HIGHLANDS  END_MIDLANDS  ERODED_BADLANDS  FLOWER_FOREST  FOREST  FROZEN_OCEAN  FROZEN_PEAKS  FROZEN_RIVER  GROVE  ICE_SPIKES  JAGGED_PEAKS  JUNGLE  LUKEWARM_OCEAN  LUSH_CAVES  MANGROVE_SWAMP  MEADOW  MUSHROOM_FIELDS  NETHER_WASTES  OCEAN  OLD_GROWTH_BIRCH_FOREST  OLD_GROWTH_PINE_TAIGA  OLD_GROWTH_SPRUCE_TAIGA  PLAINS  RIVER  SAVANNA  SAVANNA_PLATEAU  SMALL_END_ISLANDS  SNOWY_BEACH  SNOWY_PLAINS  SNOWY_SLOPES  SNOWY_TAIGA  SOUL_SAND_VALLEY  SPARSE_JUNGLE  STONY_PEAKS  STONY_SHORE  SUNFLOWER_PLAINS  SWAMP  TAIGA  THE_END  THE_VOID  WARM_OCEAN  WARPED_FOREST  WINDSWEPT_FOREST  WINDSWEPT_GRAVELLY_HILLS  WINDSWEPT_HILLS  WINDSWEPT_SAVANNA  WOODED_BADLANDS  OTHERS".split('  '))
@@ -549,6 +548,46 @@ def checkRecipeTypes(addon):
     yield
 
 
+def checkMobDrops(addon):
+    global i, position
+    
+    def check(data):
+        global i, position
+        # necessary
+        position = f'mob_drops: {scan_file} 的 {i} '
+        loadReg(data, position)
+        dgroup = data['item_group']
+        isGroup(dgroup, position+'的 item_group')
+        ditem = data['item']
+        isItem(ditem, position+'的 item')
+        dentity = data['entity']
+        if dentity not in entities:
+            report(position+'的 entity')
+            error(f'{dentity} 不是正确的生物')
+        dchance = data['chance']
+        isInt(dchance, position+'的 chance', 0, 100)
+        items.add(i)
+
+    lateinits = set()
+    scan_file = "addons/"+addon+"/mob_drops.yml"
+    printc(f'Loading mob_drops: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
+
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
+
+    yield
+    for i in lateinits:
+        data = k[i]
+        check(data)
+    yield
+
+
 def checkGeoResources(addon):
     global i, position
 
@@ -600,46 +639,6 @@ def checkGeoResources(addon):
             lateinits.add(i)
             continue
         check(data)
-    yield
-    for i in lateinits:
-        data = k[i]
-        check(data)
-    yield
-
-
-def checkMobDrops(addon):
-    global i, position
-    
-    def check(data):
-        global i, position
-        # necessary
-        position = f'mob_drops: {scan_file} 的 {i} '
-        loadReg(data, position)
-        dgroup = data['item_group']
-        isGroup(dgroup, position+'的 item_group')
-        ditem = data['item']
-        isItem(ditem, position+'的 item')
-        dentity = data['entity']
-        if dentity not in entities:
-            report(position+'的 entity')
-            error(f'{dentity} 不是正确的生物')
-        dchance = data['chance']
-        isInt(dchance, position+'的 chance', 0, 100)
-        items.add(i)
-
-    lateinits = set()
-    scan_file = "addons/"+addon+"/mob_drops.yml"
-    printc(f'Loading mob_drops: {scan_file}')
-    with open(scan_file, 'r', encoding='utf-8') as f:
-        k = getYamlContext(f)
-
-    for i in k:
-        data = k[i]
-        if isLateInit(data):
-            lateinits.add(i)
-            continue
-        check(data)
-
     yield
     for i in lateinits:
         data = k[i]
@@ -797,6 +796,76 @@ def checkCapacitors(addon):
     lateinits = set()
     scan_file = "addons/"+addon+"/capacitors.yml"
     printc(f'Loading capacitors: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
+
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
+    yield
+    for i in lateinits:
+        data = k[i]
+        check(data)
+    yield
+
+
+def checkFoods(addon):
+    global i, position
+    
+    def check(data):
+        global i, position
+        # necessary
+        position = f'foods: {scan_file} 的 {i} '
+        loadReg(data, position)
+        dgroup = data['item_group']
+        isGroup(dgroup, position+'的 item_group')
+        ditem = data['item']
+        isItem(ditem, position+'的 item')
+        isRecipe(data, position+'的 recipe')
+        
+        # not necessary
+        dplaceable = data.get('placeable', False)
+        isbool(dplaceable, 'placeable', position)
+        dscript = data.get('script', null)
+        isScript(dscript, position+'的 script')
+        if dscript == null:
+            report(position)
+            error('在foods.yml中不能缺少 script！')
+        dglow = data.get('glow', False)
+        isbool(dglow, 'glow', position)
+        drainbow = data.get('rainbow', 'WOOL')
+        isRainbowType(drainbow, position+'的 rainbow 的 {ritem}')
+        if drainbow == 'CUSTOM':
+            rainbow_materials = data.get('rainbow_materials', null)
+            if rainbow_materials == null:
+                report(position)
+                error('缺少 rainbow_materials')
+            for ritem in rainbow_materials:
+                isVanilla(ritem, position+'的 rainbow_materials')
+        danti_wither = data.get('anti_wither', False)
+        isbool(danti_wither, 'anti_wither', position)
+        dsoulbound = data.get('soulbound', False)
+        isbool(dsoulbound, 'soulbound', position)
+        dvanilla = data.get('vanilla', False)
+        isbool(dvanilla, 'vanilla', position)
+        energy_capacity = data.get('energy_capacity', 0)
+        isInt(energy_capacity, position+'的 energy_capacity')
+        radiation = data.get('radiation', null)
+        if radiation not in radiation_levels:
+            report(position+'的 radiation')
+            error(f'{radiation} 不是正确的辐射等级')
+        piglin_trade = data.get('piglin_trade', {})
+        piglin_trade_chance = piglin_trade.get('piglin_trade_chance', 0)
+        isInt(piglin_trade_chance, position+'的 piglin_trade 的 piglin_trade_chance')
+
+        items.add(i)
+    
+    lateinits = set()
+    scan_file = "addons/"+addon+"/foods.yml"
+    printc(f'Loading foods: {scan_file}')
     with open(scan_file, 'r', encoding='utf-8') as f:
         k = getYamlContext(f)
 
@@ -1149,7 +1218,7 @@ def checkRecipeMachines(addon):
 
 def checkSimpleMachines(addon):
     global i, position
-    
+
     def check(data):
         global i, position
         # necessary
@@ -1259,6 +1328,53 @@ def checkMultiblockMachines(addon):
     yield
 
 
+def checkSupers(addon):
+    global i, position
+    
+    def check(data):
+        global i, position
+        # necessary
+        position = f'supers: {scan_file} 的 {i} '
+        loadReg(data, position)
+        dgroup = data['item_group']
+        isGroup(dgroup, position+'的 item_group')
+        ditem = data['item']
+        isItem(ditem, position+'的 item')
+        isRecipe(data, position+'的 recipe')
+        dclass = data['class']
+        if not isinstance(dclass, str):
+            report(position)
+            error(f"{dclass} 不是有效的 class")
+        dargs = data.get('args', [])
+        if not isinstance(dargs, list):
+            report(position+'的 args')
+            error('args 必须一个是 List ')
+        dfields = data.get('field', {})
+        if not isinstance(dfields, dict):
+            report(position+'的 field')
+            error('fields 必须是一个 map')
+
+        items.add(i)
+    
+    lateinits = set()
+    scan_file = "addons/"+addon+"/supers.yml"
+    printc(f'Loading supers: {scan_file}')
+    with open(scan_file, 'r', encoding='utf-8') as f:
+        k = getYamlContext(f)
+
+    for i in k:
+        data = k[i]
+        if isLateInit(data):
+            lateinits.add(i)
+            continue
+        check(data)
+    yield
+    for i in lateinits:
+        data = k[i]
+        check(data)
+    yield
+
+
 def checkResearches(addon):
     global i, position
 
@@ -1307,29 +1423,36 @@ def checkResearches(addon):
 
 def checkAll():
     global i, position, saveditems, scripts
-    chs = []
     for addon in addons:
+        print(f'{color.green}Loading {addon}')
+        chs = []
         scripts = getScripts(addon)
         saveditems = getSaveditems(addon)
         for checker in checkers:
+            if checker == int:
+                continue
             chs.append(checker(addon))
-        try:
-            for __ in range(2):
-                if __ == 1:
-                    print(f'{color.gold} loading lateInit items:')
-                for ch in chs:
-                    start = time()
+        for __ in range(2):
+            if __ == 1:
+                print(f'{color.gold} Loading lateInit items:')
+            for ch in chs:
+                start = time()
+                try:
                     next(ch)
-                    print(f'{color.green}Spent {time() - start}s')
-        except (yaml.scanner.ScannerError, yaml.parser.ParserError):
-            error('在获取YAML内容时遇到了错误！')
-            error('可能是YAML结构错误！请在下方网站内检查')
-            error('https://www.bejson.com/validators/yaml_editor/')
-        except KeyError:
-            report(position)
-            error('未找到参数！')
-            error('可能是YAML缺少了参数或参数不完整！')
-            error(f'相关信息 {i} {position}')
+                except (yaml.scanner.ScannerError, yaml.parser.ParserError):
+                    error('在获取YAML内容时遇到了错误！')
+                    error('可能是YAML结构错误！请在下方网站内检查')
+                    error('https://www.bejson.com/validators/yaml_editor/')
+                except KeyError:
+                    report(position)
+                    error('未找到参数！')
+                    error('可能是YAML缺少了参数或参数不完整！')
+                    error(f'相关信息 {i} {position}')
+                except FileNotFoundError:
+                    warn('未找到文件，已跳过')
+                except StopIteration:
+                    ...
+                print(f'{color.green}Spent {time() - start}s')
 
 
 try:
@@ -1349,11 +1472,12 @@ try:
         # int just a placeholder
         int if ignores['ignoreGroups'] else checkGroups,
         int if ignores['ignoreRecipeTypes'] else checkRecipeTypes,
-        int if ignores['ignoreGeoResources'] else checkGeoResources,
         int if ignores['ignoreMobDrops'] else checkMobDrops,
+        int if ignores['ignoreGeoResources'] else checkGeoResources,
         int if ignores['ignoreItems'] else checkItems,
         int if ignores['ignoreArmors'] else checkArmors,
         int if ignores['ignoreCapacitors'] else checkCapacitors,
+        int if ignores['ignoreFoods'] else checkFoods,
         int if ignores['ignoreMenus'] else checkMenus,
         int if ignores['ignoreGenerators'] else checkGenerators,
         int if ignores['ignoreSolarGenerators'] else checkSolarGenerators,
@@ -1362,6 +1486,7 @@ try:
         int if ignores['ignoreRecipeMachines'] else checkRecipeMachines,
         int if ignores['ignoreSimpleMachines'] else checkSimpleMachines,
         int if ignores['ignoreMultiblockMachines'] else checkMultiblockMachines,
+        int if ignores['ignoreSupers'] else checkSupers,
         int if ignores['ignoreResearches'] else checkResearches
     ]
     RewriteSlimefunItems()
@@ -1380,14 +1505,12 @@ try:
             entities.add(item[:-10])
     entities.add("GIANT")
     checkAll()
+    position = ''
 except FileNotFoundError as err:
     error('无法找到文件！')
     error(err)
-except BaseException:  # 任何错误
-    error('运行程序时遇到了致命错误，请查看错误信息，确定并非自己的问题后，可联系作者修复！')
-    error(f'在检查 {i} 时遇到了错误，可能是缺少必需参数！')
-    error(f'相关信息 {position}')
 finally:
+    print(f"{color.green}{position}")
     print(f"{color.cyan}Done! {time() - sum_start}s")
     print(f'{color.cyan}共{totalBug}个Bug')
     print(f'{color.cyan}共{totalWarn}个Warn')

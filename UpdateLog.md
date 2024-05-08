@@ -1,3 +1,9 @@
+# 1.5REALEASE
+
+1. 检测修复
+
+   - 同步RSC1.4SNAPSHOT
+
 # 1.5SHOT
 
 1. 检测修复

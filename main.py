@@ -4,16 +4,17 @@ import yaml
 
 from time import time
 
-_VERSION = '1.5 SHOT'
+_VERSION = '1.5 REALEASE'
 MAXINT = 2147483647
 recipe_types = set("ENHANCED_CRAFTING_TABLE, MAGIC_WORKBENCH, ARMOR_FORGE, COMPRESSOR, PRESSURE_CHAMBER, SMELTERY, ORE_CRUSHER, GRIND_STONE, ANCIENT_ALTAR, NULL, MULTIBLOCK, GEO_MINER, GOLD_PAN, JUICER, MOB_DROP, BARTER_DROP, INTERACT, HEATED_PRESSURE_CHAMBER, FOOD_FABRICATOR, FOOD_COMPOSTER, FREEZER, REFINERY, NUCLEAR_REACTOR".split(', '))
-BIOMES = set("BADLANDS  BAMBOO_JUNGLE  BASALT_DELTAS  BEACH  BIRCH_FOREST  CHERRY_GROVE  COLD_OCEAN  CRIMSON_FOREST  CUSTOM DARK_FOREST  DEEP_COLD_OCEAN  DEEP_DARK  DEEP_FROZEN_OCEAN  DEEP_LUKEWARM_OCEAN  DEEP_OCEAN  DESERT  DRIPSTONE_CAVES  END_BARRENS  END_HIGHLANDS  END_MIDLANDS  ERODED_BADLANDS  FLOWER_FOREST  FOREST  FROZEN_OCEAN  FROZEN_PEAKS  FROZEN_RIVER  GROVE  ICE_SPIKES  JAGGED_PEAKS  JUNGLE  LUKEWARM_OCEAN  LUSH_CAVES  MANGROVE_SWAMP  MEADOW  MUSHROOM_FIELDS  NETHER_WASTES  OCEAN  OLD_GROWTH_BIRCH_FOREST  OLD_GROWTH_PINE_TAIGA  OLD_GROWTH_SPRUCE_TAIGA  PLAINS  RIVER  SAVANNA  SAVANNA_PLATEAU  SMALL_END_ISLANDS  SNOWY_BEACH  SNOWY_PLAINS  SNOWY_SLOPES  SNOWY_TAIGA  SOUL_SAND_VALLEY  SPARSE_JUNGLE  STONY_PEAKS  STONY_SHORE  SUNFLOWER_PLAINS  SWAMP  TAIGA  THE_END  THE_VOID  WARM_OCEAN  WARPED_FOREST  WINDSWEPT_FOREST  WINDSWEPT_GRAVELLY_HILLS  WINDSWEPT_HILLS  WINDSWEPT_SAVANNA  WOODED_BADLANDS  OTHERS".split('  '))
+biomes = set("BADLANDS  BAMBOO_JUNGLE  BASALT_DELTAS  BEACH  BIRCH_FOREST  CHERRY_GROVE  COLD_OCEAN  CRIMSON_FOREST  CUSTOM DARK_FOREST  DEEP_COLD_OCEAN  DEEP_DARK  DEEP_FROZEN_OCEAN  DEEP_LUKEWARM_OCEAN  DEEP_OCEAN  DESERT  DRIPSTONE_CAVES  END_BARRENS  END_HIGHLANDS  END_MIDLANDS  ERODED_BADLANDS  FLOWER_FOREST  FOREST  FROZEN_OCEAN  FROZEN_PEAKS  FROZEN_RIVER  GROVE  ICE_SPIKES  JAGGED_PEAKS  JUNGLE  LUKEWARM_OCEAN  LUSH_CAVES  MANGROVE_SWAMP  MEADOW  MUSHROOM_FIELDS  NETHER_WASTES  OCEAN  OLD_GROWTH_BIRCH_FOREST  OLD_GROWTH_PINE_TAIGA  OLD_GROWTH_SPRUCE_TAIGA  PLAINS  RIVER  SAVANNA  SAVANNA_PLATEAU  SMALL_END_ISLANDS  SNOWY_BEACH  SNOWY_PLAINS  SNOWY_SLOPES  SNOWY_TAIGA  SOUL_SAND_VALLEY  SPARSE_JUNGLE  STONY_PEAKS  STONY_SHORE  SUNFLOWER_PLAINS  SWAMP  TAIGA  THE_END  THE_VOID  WARM_OCEAN  WARPED_FOREST  WINDSWEPT_FOREST  WINDSWEPT_GRAVELLY_HILLS  WINDSWEPT_HILLS  WINDSWEPT_SAVANNA  WOODED_BADLANDS  OTHERS".split('  '))
 sounds = set('ANCIENT_ALTAR_FINISH_SOUND ANCIENT_ALTAR_ITEM_CHECK_SOUND ANCIENT_ALTAR_ITEM_DROP_SOUND ANCIENT_ALTAR_ITEM_PICK_UP_SOUND ANCIENT_ALTAR_START_SOUND ANCIENT_PEDESTAL_ITEM_PLACE_SOUND ARMOR_FORGE_FINISH_SOUND ARMOR_FORGE_WORKING_SOUND AUTO_CRAFTER_GUI_CLICK_SOUND AUTO_CRAFTER_UPDATE_RECIPE AUTOMATED_PANNING_MACHINE_FAIL_SOUND AUTOMATED_PANNING_MACHINE_SUCCESS_SOUND BACKPACK_CLOSE_SOUND BACKPACK_OPEN_SOUND BEE_BOOTS_FALL_SOUND COMPOSTER_COMPOST_SOUND COMPRESSOR_CRAFT_CONTRACT_SOUND COMPRESSOR_CRAFT_EXTEND_SOUND COMPRESSOR_CRAFT_SOUND COOLER_CONSUME_SOUND CRUCIBLE_ADD_LAVA_SOUND CRUCIBLE_ADD_WATER_SOUND CRUCIBLE_BLOCK_BREAK_SOUND CRUCIBLE_GENERATE_LIQUID_SOUND CRUCIBLE_INTERACT_SOUND CRUCIBLE_PLACE_LAVA_SOUND CRUCIBLE_PLACE_WATER_SOUND DEBUG_FISH_CLICK_SOUND DIET_COOKIE_CONSUME_SOUND ELYTRA_CAP_IMPACT_SOUND ENCHANTMENT_RUNE_ADD_ENCHANT_SOUND ENDER_BACKPACK_OPEN_SOUND ENHANCED_CRAFTING_TABLE_CRAFT_SOUND EXPLOSIVE_BOW_HIT_SOUND EXPLOSIVE_TOOL_EXPLODE_SOUND FISHERMAN_ANDROID_FISHING_SOUND FLASK_OF_KNOWLEDGE_FILLUP_SOUND GPS_NETWORK_ADD_WAYPOINT GPS_NETWORK_CREATE_WAYPOINT GPS_NETWORK_OPEN_PANEL_SOUND GRIND_STONE_INTERACT_SOUND GUIDE_BUTTON_CLICK_SOUND GUIDE_CONTRIBUTORS_OPEN_SOUND GUIDE_LANGUAGE_OPEN_SOUND GUIDE_OPEN_SETTING_SOUND IGNITION_CHAMBER_USE_FLINT_AND_STEEL_SOUND INFUSED_HOPPER_TELEPORT_SOUND INFUSED_MAGNET_TELEPORT_SOUND IRON_GOLEM_ASSEMBLER_ASSEMBLE_SOUND JETBOOTS_THRUST_SOUND JETPACK_THRUST_SOUND JUICER_USE_SOUND LIMITED_USE_ITEM_BREAK_SOUND MAGIC_SUGAR_CONSUME_SOUND MAGIC_WORKBENCH_FINISH_SOUND MAGIC_WORKBENCH_START_ANIMATION_SOUND MAGICAL_EYE_OF_ENDER_USE_SOUND MINER_ANDROID_BLOCK_GENERATION_SOUND MINING_TASK_SOUND ORE_WASHER_WASH_SOUND PLAYER_RESEARCHING_SOUND PORTABLE_CRAFTER_OPEN_SOUND PORTABLE_DUSTBIN_OPEN_SOUND PRESSURE_CHAMBER_FINISH_SOUND PRESSURE_CHAMBER_WORKING_SOUND PROGRAMMABLE_ANDROID_SCRIPT_DOWNLOAD_SOUND SLIME_BOOTS_FALL_SOUND SMELTERY_CRAFT_SOUND SOULBOUND_RUNE_RITUAL_SOUND SPLINT_CONSUME_SOUND STOMPER_BOOTS_STOMP_SOUND TAPE_MEASURE_MEASURE_SOUND TELEPORT_SOUND TELEPORT_UPDATE_SOUND TELEPORTATION_MANAGER_OPEN_GUI TOME_OF_KNOWLEDGE_USE_SOUND VAMPIRE_BLADE_HEALING_SOUND VANILLA_AUTO_CRAFTER_UPDATE_RECIPE_SOUND VILLAGER_RUNE_TRANSFORM_SOUND VITAMINS_CONSUME_SOUND WIND_STAFF_USE_SOUND'.split(' '))
 RainbowTypes = set('GLASS_PANE, GLASS, STAINED_GLASS, STAINED_GLASS_PANE, WOOL, TERRACOTTA, CUSTOM, GLAZED_TERRACOTTA, TERRACOTTA_ALL'.split(', '))
 simpleMachinesTypes = set(('ELECTRIC_SMELTERY ELECTRIC_FURNACE ELECTRIC_GOLD_PAN ELECTRIC_DUST_WASHER ELECTRIC_ORE_GRINDER ELECTRIC_INGOT_FACTORY ELECTRIC_INGOT_PULVERIZER CHARGING_BENCH TREE_GROWTH_ACCELERATOR ANIMAL_GROWTH_ACCELERATOR CROP_GROWTH_ACCELERATOR FREEZER CARBON_PRESS ELECTRIC_PRESS ELECTRIC_CRUCIBLE FODD_FABRICATOR HEATED_PRESSURE_CHAMBER AUTO_ENCHANTER AUTO_DISENCHANTER BOOK_BINDER AUTO_ANVIL AUTO_DRIER AUTO_BREWER REFINERY PRODUCT_COLLECTOR').split(' '))
 protection_types = set(('BEES', 'RADIATION', 'FLYING_INTO_WALL'))
 armor_levels = ['LEATHER', 'CHAINMAIL', 'IRON', 'DIAMOND', 'GOLDEN', 'NETHERITE']
 effects = {'SPEED', 'SLOWNESS', 'HASTE', 'MINING_FATIGUE', 'STRENGTH', 'INSTANT_HEALTH', 'INSTANT_DAMAGE', 'JUMP_BOOST', 'NAUSEA', 'REGENERATION', 'RESISTANCE', 'FIRE_RESISTANCE', 'WATER_BREATHING', 'INVISIBILITY', 'BLINDNESS', 'NIGHT_VISION', 'HUNGER', 'WEAKNESS', 'POISON', 'WITHER', 'HEALTH_BOOST', 'ABSORPTION', 'SATURATION', 'GLOWING', 'LEVITATION', 'LUCK', 'UNLUCK', 'SLOW_FALLING', 'CONDUIT_POWER', 'DOLPHINS_GRACE', 'BAD_OMEN', 'HERO_OF_THE_VILLAGE', 'DARKNESS'}
+enchantments = {'AQUA_AFFINITY', 'BANE_OF_ARTHROPODS', 'BINDING_CURSE', 'BLAST_PROTECTION', 'BREACH', 'CHANNELING', 'DENSITY', 'DEPTH_STRIDER', 'EFFICIENCY', 'FEATHER_FALLING', 'FIRE_ASPECT', 'FIRE_PROTECTION', 'FLAME', 'FORTUNE', 'FROST_WALKER', 'IMPALING', 'INFINITY', 'KNOCKBACK', 'LOOTING', 'LOYALTY', 'LUCK_OF_THE_SEA', 'LURE', 'MENDING', 'MULTISHOT', 'PIERCING', 'POWER', 'PROJECTILE_PROTECTION', 'PROTECTION', 'PUNCH', 'QUICK_CHARGE', 'RESPIRATION', 'RIPTIDE', 'SHARPNESS', 'SILK_TOUCH', 'SMITE', 'SOUL_SPEED', 'SWEEPING_EDGE', 'SWIFT_SNEAK', 'THORNS', 'UNBREAKING', 'VANISHING_CURSE', 'WIND_BURST'}
 bhelmets = [level+'_HELMET' for level in armor_levels]
 bchestplates = [level+'_CHESTPLATE' for level in armor_levels]
 bleggings = [level+'_LEGGINGS' for level in armor_levels]
@@ -164,15 +165,17 @@ def getScripts(addon):
 
 def inSlimefun(item): return item in SlimefunItems
 def inVanilla(item): return item.upper() in VanillaItems
-def inSaveditems(item): return item in saveditems
-def inBiome(item): return item.upper() in BIOMES
+def inSaveditems(item): return str(item) in saveditems
+def inBiome(item): return item.upper() in biomes
 def inScripts(item): return str(item) in scripts
-def inSound(item): return item.upper() in sounds
+def inSound(item): return item in sounds
 def inRainbowTypes(dtype): return dtype in RainbowTypes
 def inHelmets(item): return item.upper() in bhelmets
 def inChestplates(item): return item.upper() in bchestplates
 def inLeggings(item): return item.upper() in bleggings
 def inBoots(item): return item.upper() in bboots
+def inEnchantments(item): return item.upper() in enchantments
+def inRadiationLevels(item): return item.upper() in radiation_levels
 
 
 def isVanilla(item, position):
@@ -194,13 +197,13 @@ def isSaveditem(item, position):
 
 
 def isBiome(item, position):
-    if not inBiome(str(item)):
+    if not inBiome(item):
         report(position)
         error(f"{item} 可能不是正确的群系")
 
 
 def isSound(item, position):
-    if not inSound(str(item)):
+    if not inSound(item):
         report(position)
         error(f'{item} 可能不是正确的声音')
 
@@ -208,7 +211,7 @@ def isSound(item, position):
 def isScript(item, position):
     if item == null:
         return
-    if not inScripts(str(item)):
+    if not inScripts(item):
         report(position)
         error(f"{item} 可能不是正确的脚本名称")
 
@@ -243,6 +246,12 @@ def isBoots(item, position):
         error(f'{item} 不是有效的靴子！')
 
 
+def isEnchantment(item, position):
+    if not inEnchantments(item):
+        report(position)
+        error(f'{item} 不是有效的附魔')
+
+
 def isInt(num, position, bottom=0, top=MAXINT, Warn=False):
     if isinstance(num, int):
         if not bottom <= num <= top:
@@ -254,7 +263,37 @@ def isInt(num, position, bottom=0, top=MAXINT, Warn=False):
                 error(f"{num} 不在区间[{bottom},{top}]内")
     else:
         report(position)
-        error(f"参数 {num} 只能是整数")
+        error("参数必须是一个整数！")
+
+
+def isBool(item, position):
+    if not ((item is True) or (item is False)):
+        report(position)
+        error('参数必须是一个布尔值！')
+
+
+def isList(item, position):
+    if not isinstance(item, list):
+        report(position)
+        error('参数必须是一个列表！')
+
+
+def isDict(item, position):
+    if not isinstance(item, dict):
+        report(position)
+        error('参数必须是一个字典！')
+
+
+def isMap(item, position):
+    if not isinstance(item, map):
+        report(position)
+        error('参数必须是一个映射！（map）')
+
+
+def isRadiationLevel(item, position):
+    if not inRadiationLevels(item):
+        report(position)
+        error(f'{item} 不是有效的辐射等级')
 
 
 def getItemMaxStack(item):
@@ -264,12 +303,6 @@ def getItemMaxStack(item):
 def isAmountProper(item, dAm, position, zero=False, warn=False):
     stack = getItemMaxStack(item) if inVanilla(str(item)) else 64
     isInt(dAm, f'{position}', 0 if (stack == 0 or zero) else 1, stack, warn)
-
-
-def isbool(dat, arg, position):
-    if not (dat is True or dat is False):
-        report(f'{position} 的 {arg}')
-        error(f'{arg} 只能是 true 或 false')
 
 
 def isItem(data, position, Warn=False):
@@ -368,10 +401,10 @@ def isLateInit(data):
 def loadReg(data, position):
     # not necessary
     dlateinit = isLateInit(data)
-    isbool(dlateinit, 'lateInit', position+'的 lateInit')
+    isBool(dlateinit, position+'的 lateInit')
     dreg = data.get('register', {})
     warn = dreg.get('warn', False)
-    isbool(warn, 'warn', position+'的 warn')
+    isBool(warn, position+'的 warn')
     cond = dreg.get('conditions', ['version > 1.20'])
     for dat in cond:
         if startWith(dat, 'version'):
@@ -389,7 +422,7 @@ def loadReg(data, position):
             report(position+'的 conditions')
             error('conditions中的条件只能是 hasplugin、 !hasplugin 或 version')
     unfinished = dreg.get('unfinished', False)
-    isbool(unfinished, 'unfinished', position)
+    isBool(unfinished, position+'的 unfinished')
 
 
 def isGroup(group, position):
@@ -497,8 +530,6 @@ def checkGroups(addon):
             error('type 必须是 nested、 parent、 sub、 seasonal、 locked 或 normal')
         dtier = data.get('tier', 1)
         isInt(dtier, position+'的 tier', 1)
-        dhidden = data.get('hidden', False)
-        isbool(dhidden, 'hidden', position+'的 hidden')
 
     lateinits = set()
     scan_file = "addons/"+addon+"/groups.yml"
@@ -604,8 +635,8 @@ def checkGeoResources(addon):
         isRecipeType(drecipe_type, position+'的 recipe_type')
         dmax_deviation = data['max_deviation']
         isInt(dmax_deviation, position+'的 max_deviation')
-        dofgm = data['obtain_from_geo_miner']
-        isbool(dofgm, 'obtain_from_geo_miner', position)
+        dobtain_from_geo_miner = data['obtain_from_geo_miner']
+        isBool(dobtain_from_geo_miner, position+'的 obtain_from_geo_miner')
         supply = data['supply']
         flag = True
         position += '的 supply '
@@ -662,11 +693,11 @@ def checkItems(addon):
         
         # not necessary
         dplaceable = data.get('placeable', False)
-        isbool(dplaceable, 'placeable', position)
+        isBool(dplaceable, position+'的 placeable')
         dscript = data.get('script', null)
         isScript(dscript, position+'的 script')
         dglow = data.get('glow', False)
-        isbool(dglow, 'glow', position)
+        isBool(dglow, position+'的 glow')
         drainbow = data.get('rainbow', 'WOOL')
         isRainbowType(drainbow, position+'的 rainbow 的 {ritem}')
         if drainbow == 'CUSTOM':
@@ -677,21 +708,32 @@ def checkItems(addon):
             for ritem in rainbow_materials:
                 isVanilla(ritem, position+'的 rainbow_materials')
         danti_wither = data.get('anti_wither', False)
-        isbool(danti_wither, 'anti_wither', position)
+        isBool(danti_wither, position+'的 anti_wither')
         dsoulbound = data.get('soulbound', False)
-        isbool(dsoulbound, 'soulbound', position)
+        isBool(dsoulbound, position+'的 soulbound')
         dvanilla = data.get('vanilla', False)
-        isbool(dvanilla, 'vanilla', position)
+        isBool(dvanilla, position+'的 vanilla')
         energy_capacity = data.get('energy_capacity', 0)
         isInt(energy_capacity, position+'的 energy_capacity')
         radiation = data.get('radiation', null)
         if radiation not in radiation_levels:
             report(position+'的 radiation')
             error(f'{radiation} 不是正确的辐射等级')
-        piglin_trade = data.get('piglin_trade', {})
-        piglin_trade_chance = piglin_trade.get('piglin_trade_chance', 0)
-        isInt(piglin_trade_chance, position+'的 piglin_trade 的 piglin_trade_chance')
-
+        piglin_trade_chance = data.get('piglin_trade_chance', 0)
+        isInt(piglin_trade_chance, position+'的 piglin_trade_chance')
+        hidden = data.get('hidden', False)
+        isBool(hidden, position+'的 hidden')
+        denchantments = data.get('enchantments', {})
+        for denchantment, dlevel in denchantments.items():
+            isEnchantment(denchantment, position+'的 enchantments')
+            isInt(dlevel, position+'的 enchantments 的 '+denchantment, 0, 255)
+        drop_from = data.get('drop_from', null)
+        if drop_from != null:
+            isVanilla(drop_from, position)
+            drop_amount = data.get('drop_amount', 1)
+            drop_chance = data.get('drop_chance', 100)
+            isInt(drop_amount, position+'的 drop_amount', 1, 64)
+            isInt(drop_chance, position+'的 drop_chance', 1, 64)
         items.add(i)
     
     lateinits = set()
@@ -721,7 +763,7 @@ def checkArmors(addon):
         position = f'armors: {scan_file} 的 {i}'
         loadReg(data, position)
         fullset = data.get('fullSet', False)
-        isbool(fullset, 'fullSet', position)
+        isBool(fullset, position+'的 fullSet')
         item_group = data['item_group']
         isGroup(item_group, position+'的 item_group')
         dpts = data['protection_types']
@@ -828,14 +870,14 @@ def checkFoods(addon):
         
         # not necessary
         dplaceable = data.get('placeable', False)
-        isbool(dplaceable, 'placeable', position)
+        isBool(dplaceable, position+'的 placeable')
         dscript = data.get('script', null)
         isScript(dscript, position+'的 script')
         if dscript == null:
             report(position)
             error('在foods.yml中不能缺少 script！')
         dglow = data.get('glow', False)
-        isbool(dglow, 'glow', position)
+        isBool(dglow, position+'的 glow')
         drainbow = data.get('rainbow', 'WOOL')
         isRainbowType(drainbow, position+'的 rainbow 的 {ritem}')
         if drainbow == 'CUSTOM':
@@ -846,19 +888,16 @@ def checkFoods(addon):
             for ritem in rainbow_materials:
                 isVanilla(ritem, position+'的 rainbow_materials')
         danti_wither = data.get('anti_wither', False)
-        isbool(danti_wither, 'anti_wither', position)
+        isBool(danti_wither, position+'的 anti_wither')
         dsoulbound = data.get('soulbound', False)
-        isbool(dsoulbound, 'soulbound', position)
+        isBool(dsoulbound, position+'的 soulbound')
         dvanilla = data.get('vanilla', False)
-        isbool(dvanilla, 'vanilla', position)
+        isBool(dvanilla, position+'的 vanilla')
         energy_capacity = data.get('energy_capacity', 0)
         isInt(energy_capacity, position+'的 energy_capacity')
         radiation = data.get('radiation', null)
-        if radiation not in radiation_levels:
-            report(position+'的 radiation')
-            error(f'{radiation} 不是正确的辐射等级')
-        piglin_trade = data.get('piglin_trade', {})
-        piglin_trade_chance = piglin_trade.get('piglin_trade_chance', 0)
+        isRadiationLevel(radiation, position+'的 radiation')
+        piglin_trade_chance = data.get('piglin_trade_chance', 0)
         isInt(piglin_trade_chance, position+'的 piglin_trade 的 piglin_trade_chance')
 
         items.add(i)
@@ -900,7 +939,7 @@ def checkMenus(addon):
                 s = slots[slot]
                 isItem(s, position+f'的 {slot}')
                 progressbar = s.get('progressbar', False)
-                isbool(progressbar, 'progressbar', position)
+                isBool(progressbar, position+'的 progressbar')
             machines_slots[i] = slot_read(slots, position+'的 slots')
         else:
             if dimport not in machines_slots:
@@ -1150,7 +1189,7 @@ def checkRecipeMachines(addon):
             seconds = recipe['seconds']
             isInt(seconds, position+'的 seconds', 1)
             chooseOne = recipe.get('chooseOne', False)
-            isbool(chooseOne, 'chooseOne', position)
+            isBool(chooseOne, position+'的 chooseOne')
             temp = {}
             types = []
             recipe_input = recipe['input']
@@ -1345,15 +1384,19 @@ def checkSupers(addon):
         if not isinstance(dclass, str):
             report(position)
             error(f"{dclass} 不是有效的 class")
+        # not necessary
         dargs = data.get('args', [])
         if not isinstance(dargs, list):
             report(position+'的 args')
             error('args 必须一个是 List ')
-        dfields = data.get('field', {})
-        if not isinstance(dfields, dict):
-            report(position+'的 field')
-            error('fields 必须是一个 map')
-
+        dctor = data.get('ctor', 0)
+        isInt(dctor, position+'的 dctor')
+        darg_template = data.get('arg_template', [])
+        isList(darg_template, position+'的 arg_template')
+        dmethod = data.get('method', {})
+        isDict(dmethod, position+'的 method')
+        dfield = data.get('field', {})
+        isDict(dfield, position+'的 field')
         items.add(i)
     
     lateinits = set()

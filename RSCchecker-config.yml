@@ -6,8 +6,8 @@ ignores:
   # 填 true 或 false
   ignoreGroups: false
   ignoreRecipeTypes: false
-  ignoreGeoResources: false
   ignoreMobDrops: false
+  ignoreGeoResources: false
   ignoreItems: false
   ignoreArmors: false
   ignoreCapacitors: false
@@ -20,8 +20,8 @@ ignores:
   ignoreRecipeMachines: false
   ignoreSimpleMachines: false
   ignoreMultiblockMachines: false
-  ignoreResearches: false
   ignoreSupers: false
+  ignoreResearches: false
 
 # 扫描哪些文件
 scan-files:
@@ -32,8 +32,8 @@ scan-files:
   addons: ['example']
   Groups: ['groups.yml']
   RecipeTypes: ['recipe_types.yml']
-  GeoResources: ['geo_resources.yml']
   MobDrops: ['mob_drops.yml']
+  GeoResources: ['geo_resources.yml']
   Items: ['items.yml']
   Armors: ['armors.yml']
   Capacitors: ['capacitors.yml']
@@ -46,8 +46,8 @@ scan-files:
   RecipeMachines: ['recipe_machines.yml']
   SimpleMachines: ['simple_machines.yml']
   MultiblockMachines: ['mb_machines.yml']
-  Researches: ['researches.yml']
   Supers: ['supers.yml']
+  Researches: ['researches.yml']
 # 最多打印多少bug
 MaxPrintBug: 1000
 # 最多打印多少Warn

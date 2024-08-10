@@ -1,7 +1,8 @@
 # RSCchcker
 
 A simple python script for quickly checking the configuration of the `Slimefun` addon `RykenSlimeCustomizer`
-Author: `balugaq`
+
+Author: `balugaq` / `guguguhello`
 
 # Special thanks
 
@@ -51,7 +52,8 @@ The `main.py` file is the source code file of this script.
 
 # RSCchecker
 
-一个用于快速检查`Slimefun`附属插件`RykenSlimeCustomizer`配置的脚本  
+一个用于快速检查`Slimefun`附属插件`RykenSlimeCustomizer`配置的脚本
+
 作者：`balugaq`
 
 # 特别鸣谢

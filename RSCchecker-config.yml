@@ -1,9 +1,10 @@
-# 请勿删除这些配置，否则会影响脚本运行！
-# 请勿删除这些配置，否则会影响脚本运行！
-# 请勿删除这些配置，否则会影响脚本运行！
-# 跳过哪些检查
+# Default configuration file for RSCchecker
+
+# Debug mode is disabled by default.
+enable-debug: false
+# ignore list
 ignores:
-  # 填 true 或 false
+  # true or false
   ignoreGroups: false
   ignoreRecipeTypes: false
   ignoreMobDrops: false
@@ -21,37 +22,21 @@ ignores:
   ignoreSimpleMachines: false
   ignoreMultiblockMachines: false
   ignoreSupers: false
+  ignoreTemplateMachines: false
   ignoreResearches: false
 
-# 扫描哪些文件
+# addons to scan
 scan-files:
-  # 你应该在这里填路径
-  # ex: Groups: ['groups.yml'] 暂不支持绝对路径
-  #     addons: ['example', 'slimefunExpansion'] 暂不支持绝对路径 
-  # 诸如此类 ↑
-  addons: ['example']
-  Groups: ['groups.yml']
-  RecipeTypes: ['recipe_types.yml']
-  MobDrops: ['mob_drops.yml']
-  GeoResources: ['geo_resources.yml']
-  Items: ['items.yml']
-  Armors: ['armors.yml']
-  Capacitors: ['capacitors.yml']
-  Foods: ['foods.yml']
-  Menus: ['menus.yml']
-  Machines: ['machines.yml']
-  Generators: ['generators.yml']
-  SolarGenerators: ['solar_generators.yml']
-  MaterialGenerators: ['mat_generators.yml']
-  RecipeMachines: ['recipe_machines.yml']
-  SimpleMachines: ['simple_machines.yml']
-  MultiblockMachines: ['mb_machines.yml']
-  Supers: ['supers.yml']
-  Researches: ['researches.yml']
-# 最多打印多少bug
+  # Relative path only
+  addons:
+  - "example"
+
+# The maximum number of bugs and warnings to print in the console.
 MaxPrintBug: 1000
-# 最多打印多少Warn
 MaxPrintWarn: 100
-# 你应该在这里填粘液物品路径（default指向 ../../Slimefun/Items.yml）
-# ex: SlimefunItemsPath: 'D:/plugins/Slimefun/Items.yml'
-SlimefunItemsPath: 'default'
+# Path of Items.yml and "../../Slimefun/Items.yml" by default
+# ex: SlimefunItemsPath: 'D:/yourServerPath/plugins/Slimefun/Items.yml'
+SlimefunItemsPath: "default"
+
+# Don't change this
+config-version: 16

@@ -38,9 +38,9 @@ The `main.py` file is the source code file of this script.
 
 # Note
 
-> **This script will not check the scripts in `name`, `lore` or `scripts`!**
+> **This script will not check `name`, `lore` or `scripts`!**
 >
-> **This script will check the liquid items depend on `yourServerPath/plugins/Slimefun` `Items.yml`**
+> **This script will check the liquid items depend on `yourServerPath/plugins/Slimefun/Items.yml`**
 >
 > **Please make sure all bugs (if any) displayed in the console have been fixed, otherwise the program may not work properly!**
 >
@@ -92,7 +92,7 @@ main.py 是本脚本的源代码文件
 
 > **此脚本不会检查`name`、`lore` 或 `scripts`内的脚本！**
 >
-> **此外，此脚本的粘液物品检查依赖 `yourServerPath/plugins/Slimefun` 的 `Items.yml`**
+> **此外，此脚本的粘液物品检查依赖 `yourServerPath/plugins/Slimefun/Items.yml`**
 >
 > **请确保运行后在控制台输出的Bug（若有）皆已修复，本程序才能正常运行！**
 >

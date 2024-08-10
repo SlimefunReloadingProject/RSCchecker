@@ -13,13 +13,6 @@ Special thanks to `haiman` who helped me on `github`
 
 # Usage
 
-## About RSCchecker.exe
-
-The `RSCchecker.exe` file is the executable file of this script.
-
-1. Extract all files to `yourServerPath/plugins/RykenSlimeCustomizer`
-2. Run `RSCchecker.exe`, and you can start checking the configuration quickly.
-
 ## About main.py
 
 The `main.py` file is the source code file of this script.
@@ -64,13 +57,6 @@ The `main.py` file is the source code file of this script.
 > <https://github.com/haiman233>
 
 # 使用方式
-
-## 关于 RSCchecker.exe
-
-RSCchecker.exe 文件是本脚本的可执行文件
-
-1. 将全部文件解压到 `yourServerPath/plugins/RykenSlimeCustomizer`
-2. 运行 `RSCchecker.exe`，就可以开始快速检查了
 
 ## 关于 main.py
 
